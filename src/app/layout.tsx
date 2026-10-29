@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { AppDataProvider } from "@/data/provider";
 import { AppShell } from "@/ui/app-shell";
 import "./globals.css";
 
@@ -18,7 +19,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
       <body className="min-h-full">
-        <AppShell>{children}</AppShell>
+        <AppDataProvider>
+          <AppShell>{children}</AppShell>
+        </AppDataProvider>
       </body>
     </html>
   );
