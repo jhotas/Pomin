@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Session, Skill } from "@/data/schemas";
 import { formatHours } from "@/lib/time";
 import { MasteryGrid } from "./mastery-grid";
@@ -44,6 +45,14 @@ export function SkillProgressPanel({
         {hoursFormat.format(target / 100)} hours
       </p>
       <MasteryGrid focusedSeconds={total} targetHours={target} />
+      {skill && (
+        <Link
+          href={`/skills/${skill.id}`}
+          className="mt-5 inline-block font-medium underline-offset-4 hover:underline"
+        >
+          View progress
+        </Link>
+      )}
     </section>
   );
 }

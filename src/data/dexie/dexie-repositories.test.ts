@@ -197,6 +197,23 @@ describe("sessions", () => {
     expect(oct29.map((s) => s.startedAt)).toEqual(["2026-10-29T12:00:00.000Z"]);
   });
 
+  test("listAll returns every live session in time order", async () => {
+    const guitar = await repos.skills.create({ name: "Guitar" });
+    const chess = await repos.skills.create({ name: "Chess" });
+    await repos.sessions.add(focusBlock(chess.id, "2026-10-29T10:00:00.000Z"));
+    const gone = await repos.sessions.add(
+      focusBlock(guitar.id, "2026-10-29T09:00:00.000Z"),
+    );
+    await repos.sessions.add(focusBlock(guitar.id, "2026-10-29T08:00:00.000Z"));
+    await repos.sessions.remove(gone.id);
+
+    const all = await repos.sessions.listAll();
+    expect(all.map((s) => [s.skillId, s.startedAt])).toEqual([
+      [guitar.id, "2026-10-29T08:00:00.000Z"],
+      [chess.id, "2026-10-29T10:00:00.000Z"],
+    ]);
+  });
+
   test("the most recent come first across skills", async () => {
     const guitar = await repos.skills.create({ name: "Guitar" });
     const chess = await repos.skills.create({ name: "Chess" });

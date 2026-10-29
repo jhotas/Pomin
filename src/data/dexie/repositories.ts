@@ -164,6 +164,14 @@ function createSessionRepository({
   notifier,
 }: Deps): SessionRepository {
   return {
+    async listAll() {
+      const rows = await db.sessions
+        .orderBy("startedAt")
+        .filter(isLive)
+        .toArray();
+      return rows.map((row) => SessionSchema.parse(row));
+    },
+
     async listBySkill(skillId, range) {
       const rows = await db.sessions.where("skillId").equals(skillId).toArray();
       return rows

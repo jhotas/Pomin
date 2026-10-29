@@ -2,14 +2,12 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./logo";
-import { NavList } from "./nav-list";
+import { SidebarNav } from "./sidebar-nav";
 import { StorageScope } from "./storage-scope";
 
 export function MobileNav() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openButtonRef = useRef<HTMLButtonElement>(null);
@@ -73,7 +71,7 @@ export function MobileNav() {
             </button>
           </div>
           <div className="mt-6 text-section">
-            <NavList pathname={pathname} onNavigate={close} />
+            <SidebarNav onNavigate={close} />
           </div>
           <div className="mt-auto">
             <StorageScope />

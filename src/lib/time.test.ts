@@ -1,5 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { dayRange, formatClock, formatDuration, formatHours } from "./time";
+import {
+  dayRange,
+  formatClock,
+  formatDayLabel,
+  formatDuration,
+  formatHours,
+  formatMonthYear,
+  formatShortDate,
+} from "./time";
 
 describe("formatClock", () => {
   test.each([
@@ -44,4 +52,21 @@ test("dayRange covers one local day, half-open", () => {
   const { from, to } = dayRange(noon);
   expect(new Date(from)).toEqual(new Date(2026, 9, 29, 0, 0));
   expect(new Date(to)).toEqual(new Date(2026, 9, 30, 0, 0));
+});
+
+describe("formatDayLabel", () => {
+  const now = new Date(2026, 9, 29, 15);
+  test.each([
+    [new Date(2026, 9, 29, 0, 5), "Today"],
+    [new Date(2026, 9, 28, 23, 55), "Yesterday"],
+    [new Date(2026, 9, 20, 8), "2026-10-20"],
+  ])("%s is %s", (date, expected) => {
+    expect(formatDayLabel(date.toISOString(), now)).toBe(expected);
+  });
+});
+
+test("formatMonthYear and formatShortDate", () => {
+  expect(formatMonthYear(new Date(2054, 1, 14))).toBe("February 2054");
+  expect(formatMonthYear(new Date(2054, 1, 14), "short")).toBe("Feb 2054");
+  expect(formatShortDate(new Date(2026, 9, 19))).toBe("Oct 19");
 });

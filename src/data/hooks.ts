@@ -86,6 +86,13 @@ export function useSkillSessions(skillId: string, range?: TimeRange) {
   );
 }
 
+export function useAllSessions() {
+  return useLiveQuery<Session[]>(
+    (data) => data.sessions.listAll(),
+    "sessions:all",
+  );
+}
+
 export function useRecentSessions(limit: number) {
   return useLiveQuery<Session[]>(
     (data) => data.sessions.listRecent(limit),

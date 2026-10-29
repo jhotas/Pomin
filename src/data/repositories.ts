@@ -18,6 +18,8 @@ export interface SkillRepository {
 }
 
 export interface SessionRepository {
+  /** Every live session, oldest first. */
+  listAll(): Promise<Session[]>;
   listBySkill(skillId: string, range?: TimeRange): Promise<Session[]>;
   listRecent(limit: number): Promise<Session[]>;
   add(session: NewSession): Promise<Session>;

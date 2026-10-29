@@ -8,8 +8,9 @@ export function formatClock(ms: number): string {
   const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  // A clock face, not index numbering. taste-skill-ignore
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  const mm = String(minutes).padStart(2, "0"); // a clock face taste-skill-ignore
+  const ss = String(seconds).padStart(2, "0"); // taste-skill-ignore
+  return `${mm}:${ss}`;
 }
 
 /** Seconds as hours with one decimal, e.g. `1,234.5`. */
@@ -39,4 +40,52 @@ export function formatTimeOfDay(iso: string): string {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function localDateKey(date: Date): string {
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // taste-skill-ignore
+  const day = String(date.getDate()).padStart(2, "0"); // taste-skill-ignore
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+/** `Today`, `Yesterday`, or the local date in ISO form for rows compared by date. */
+export function formatDayLabel(iso: string, now: Date): string {
+  const key = localDateKey(new Date(iso));
+  if (key === localDateKey(now)) return "Today";
+  const yesterday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - 1,
+  );
+  if (key === localDateKey(yesterday)) return "Yesterday";
+  return key;
+}
+
+const monthYearFormat = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
+const shortDateFormat = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+
+const shortMonthYearFormat = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  year: "numeric",
+});
+
+/** `February 2054`, or `Feb 2054` where space is tight. */
+export function formatMonthYear(
+  date: Date,
+  length: "long" | "short" = "long",
+): string {
+  return (length === "long" ? monthYearFormat : shortMonthYearFormat).format(
+    date,
+  );
+}
+
+/** `Oct 19`. */
+export function formatShortDate(date: Date): string {
+  return shortDateFormat.format(date);
 }
