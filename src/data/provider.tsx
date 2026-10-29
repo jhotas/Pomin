@@ -9,8 +9,14 @@ import {
 } from "react";
 import { PomoDatabase } from "./dexie/database";
 import { createDexieRepositories } from "./dexie/repositories";
+import { ChangeNotifier } from "./notifier";
 import type { Repositories } from "./repositories";
 import { createSettingsStore, type SettingsStore } from "./settings-store";
+import {
+  createAccountStore,
+  type AccountStore,
+} from "@/features/account/account-store";
+import { createBrowserSupabase } from "@/features/account/supabase";
 import {
   createTimerStore,
   type TimerStore,
@@ -19,6 +25,8 @@ import {
 export type AppData = Repositories & {
   settings: SettingsStore;
   timer: TimerStore;
+  /** null when no Supabase project is configured. */
+  account: AccountStore | null;
 };
 
 /** null while rendering on the server, where there is no browser storage. */
@@ -28,11 +36,20 @@ const noSubscription = () => () => {};
 
 function createLocalAppData(): AppData | null {
   if (typeof window === "undefined") return null;
-  const settings = createSettingsStore(window.localStorage);
+  const storage = window.localStorage;
+  const db = new PomoDatabase();
+  // Repositories and sync write the same database, so they share a notifier.
+  const notifier = new ChangeNotifier();
+  const settings = createSettingsStore(storage);
+  const timer = createTimerStore(storage, settings.get);
+  const supabase = createBrowserSupabase();
   return {
-    ...createDexieRepositories(new PomoDatabase()),
+    ...createDexieRepositories(db, { notifier }),
     settings,
-    timer: createTimerStore(window.localStorage, settings.get),
+    timer,
+    account: supabase
+      ? createAccountStore({ supabase, db, notifier, timer, storage })
+      : null,
   };
 }
 

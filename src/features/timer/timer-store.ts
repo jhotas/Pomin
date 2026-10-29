@@ -21,6 +21,10 @@ export type TimerStore = {
   dispatch(action: TimerAction, now: number): TimerEvent[];
   /** Chooses the skill for the next block. Refused while a block is under way. */
   selectSkill(skillId: string | null): boolean;
+  /** Moves the current block to another skill, when two skills were merged. */
+  replaceSkill(from: string, to: string): void;
+  /** Drops the block under way and the chosen skill, as after a sign-out. */
+  clear(): void;
   /** Re-reads the settings; an idle phase takes the new length. */
   applySettings(): void;
   subscribe(listener: () => void): () => void;
@@ -96,6 +100,14 @@ export function createTimerStore(
       if (current.state.status !== "idle") return false;
       if (skillId !== current.skillId) commit({ ...current, skillId });
       return true;
+    },
+
+    replaceSkill(from, to) {
+      if (current.skillId === from) commit({ ...current, skillId: to });
+    },
+
+    clear() {
+      commit({ state: initialTimerState(getSettings()), skillId: null });
     },
 
     applySettings() {

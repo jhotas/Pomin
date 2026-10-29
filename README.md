@@ -16,6 +16,17 @@ pnpm dev
 
 Open http://localhost:3000.
 
+## Accounts and sync (optional)
+
+Without configuration the app keeps everything in the browser. To let people sign in and sync across devices, connect a [Supabase](https://supabase.com) project:
+
+1. Create a project. In **SQL Editor**, run [`supabase/migrations/20261029120000_accounts_and_sync.sql`](supabase/migrations/20261029120000_accounts_and_sync.sql). It creates the `skills` and `sessions` tables with row-level security and the `push_changes` and `pull_changes` functions.
+2. In **Authentication > URL Configuration**, set the site URL and add `http://localhost:3000/**` (and your deployed URL) to the redirect URLs.
+3. Copy `.env.example` to `.env.local` and fill in the project URL and publishable key from **Project Settings > API Keys**.
+4. Optional: to offer GitHub sign-in, enable GitHub under **Authentication > Providers** and set `NEXT_PUBLIC_SUPABASE_GITHUB_ENABLED=true`.
+
+How sync works: IndexedDB stays the source the app reads, so the app is as fast and offline-capable signed in as signed out. A sync engine pushes records changed since its last push and pulls rows the server stamped since its last pull. Each record keeps the version written last (`updatedAt`); deletions travel as tombstones. On a browser's first sync, its skills are merged into the account's skills of the same name. Signing out removes the account's data from that browser.
+
 ## Scripts
 
 | Script              | What it does                                        |

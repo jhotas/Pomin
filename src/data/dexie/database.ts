@@ -12,5 +12,10 @@ export class PomoDatabase extends Dexie {
       skills: "id",
       sessions: "id, skillId, startedAt",
     });
+    // Sync reads the records changed since its last push.
+    this.version(2).stores({
+      skills: "id, updatedAt",
+      sessions: "id, skillId, startedAt, updatedAt",
+    });
   }
 }

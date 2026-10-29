@@ -21,6 +21,8 @@ import type { PomoDatabase } from "./database";
 type Options = {
   now?: () => Date;
   newId?: () => string;
+  /** Shared with other writers of the same database, such as sync. */
+  notifier?: ChangeNotifier;
 };
 
 type Deps = {
@@ -36,13 +38,17 @@ type Deps = {
  */
 export function createDexieRepositories(
   db: PomoDatabase,
-  { now = () => new Date(), newId = () => crypto.randomUUID() }: Options = {},
+  {
+    now = () => new Date(),
+    newId = () => crypto.randomUUID(),
+    notifier = new ChangeNotifier(),
+  }: Options = {},
 ): Repositories {
   const deps: Deps = {
     db,
     now: () => now().toISOString(),
     newId,
-    notifier: new ChangeNotifier(),
+    notifier,
   };
   return {
     skills: createSkillRepository(deps),
@@ -50,8 +56,10 @@ export function createDexieRepositories(
   };
 }
 
-const isLive = (row: { deletedAt: string | null }) => row.deletedAt === null;
-const sameName = (a: string, b: string) =>
+export const isLive = (row: { deletedAt: string | null }) =>
+  row.deletedAt === null;
+/** Skill names are unique ignoring case. */
+export const sameName = (a: string, b: string) =>
   a.localeCompare(b, undefined, { sensitivity: "accent" }) === 0;
 
 function createSkillRepository({
