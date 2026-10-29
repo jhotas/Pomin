@@ -18,18 +18,18 @@ Open http://localhost:3000.
 
 ## Scripts
 
-| Script              | What it does                                       |
-| ------------------- | -------------------------------------------------- |
-| `pnpm dev`          | Start the development server                       |
-| `pnpm build`        | Build for production                               |
-| `pnpm start`        | Serve the production build                         |
-| `pnpm lint`         | Lint with ESLint                                   |
-| `pnpm typecheck`    | Type-check with TypeScript                         |
-| `pnpm format`       | Format all files with Prettier                     |
-| `pnpm format:check` | Check formatting without writing                   |
-| `pnpm test`         | Run unit tests once (Vitest)                       |
-| `pnpm test:watch`   | Run unit tests in watch mode                       |
-| `pnpm test:e2e`     | Build, serve and run end-to-end tests (Playwright) |
+| Script              | What it does                                        |
+| ------------------- | --------------------------------------------------- |
+| `pnpm dev`          | Start the development server                        |
+| `pnpm build`        | Build for production                                |
+| `pnpm start`        | Serve the production build                          |
+| `pnpm lint`         | Lint with ESLint                                    |
+| `pnpm typecheck`    | Generate route types and type-check with TypeScript |
+| `pnpm format`       | Format all files with Prettier                      |
+| `pnpm format:check` | Check formatting without writing                    |
+| `pnpm test`         | Run unit tests once (Vitest)                        |
+| `pnpm test:watch`   | Run unit tests in watch mode                        |
+| `pnpm test:e2e`     | Build, serve and run end-to-end tests (Playwright)  |
 
 ## Design
 
