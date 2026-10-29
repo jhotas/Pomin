@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# pomoapp
 
-## Getting Started
+pomoapp is a pomodoro timer that records focused time per skill, so you can track your progress toward 10,000 hours of deliberate practice in each one. It works fully offline with no account. An optional account adds sync across devices.
 
-First, run the development server:
+## Requirements
+
+- Node.js 26 (see `.nvmrc`)
+- pnpm
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script              | What it does                                       |
+| ------------------- | -------------------------------------------------- |
+| `pnpm dev`          | Start the development server                       |
+| `pnpm build`        | Build for production                               |
+| `pnpm start`        | Serve the production build                         |
+| `pnpm lint`         | Lint with ESLint                                   |
+| `pnpm typecheck`    | Type-check with TypeScript                         |
+| `pnpm format`       | Format all files with Prettier                     |
+| `pnpm format:check` | Check formatting without writing                   |
+| `pnpm test`         | Run unit tests once (Vitest)                       |
+| `pnpm test:watch`   | Run unit tests in watch mode                       |
+| `pnpm test:e2e`     | Build, serve and run end-to-end tests (Playwright) |
 
-## Learn More
+## Design
 
-To learn more about Next.js, take a look at the following resources:
+The product and technical design lives in [`docs/superpowers/specs/2026-10-29-pomoapp-design.md`](docs/superpowers/specs/2026-10-29-pomoapp-design.md). Implementation plans for each part are in [`docs/superpowers/plans/`](docs/superpowers/plans/).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How this was built
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is developed with Claude Code as an AI pair programmer. Commits it wrote carry a `Co-Authored-By` trailer.
