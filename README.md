@@ -27,9 +27,6 @@ Open http://localhost:3000.
 | `pnpm typecheck`    | Generate route types and type-check with TypeScript |
 | `pnpm format`       | Format all files with Prettier                      |
 | `pnpm format:check` | Check formatting without writing                    |
-| `pnpm test`         | Run unit tests once (Vitest)                        |
-| `pnpm test:watch`   | Run unit tests in watch mode                        |
-| `pnpm test:e2e`     | Build, serve and run end-to-end tests (Playwright)  |
 
 ## Design
 
