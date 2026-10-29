@@ -39,8 +39,8 @@ All records use client-generated UUIDs, so they can be created offline and synce
 ```ts
 type Skill = {
   id: string;
-  name: string;            // 1-60 chars, unique among non-deleted skills (case-insensitive)
-  targetHours: number;     // default 10_000
+  name: string; // 1-60 chars, unique among non-deleted skills (case-insensitive)
+  targetHours: number; // default 10_000
   archivedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -52,7 +52,7 @@ type Session = {
   skillId: string;
   startedAt: string;
   endedAt: string;
-  focusedSeconds: number;  // actual focused time, excluding pauses
+  focusedSeconds: number; // actual focused time, excluding pauses
   plannedSeconds: number;
   outcome: "completed" | "interrupted";
   createdAt: string;
@@ -61,13 +61,13 @@ type Session = {
 };
 
 type Settings = {
-  focusMinutes: number;          // default 25
-  shortBreakMinutes: number;     // default 5
-  longBreakMinutes: number;      // default 15
-  longBreakEvery: number;        // default 4 focus sessions
-  autoStartBreaks: boolean;      // default false
-  autoStartFocus: boolean;       // default false
-  soundEnabled: boolean;         // default true
+  focusMinutes: number; // default 25
+  shortBreakMinutes: number; // default 5
+  longBreakMinutes: number; // default 15
+  longBreakEvery: number; // default 4 focus sessions
+  autoStartBreaks: boolean; // default false
+  autoStartFocus: boolean; // default false
+  soundEnabled: boolean; // default true
   activeSkillId: string | null;
 };
 ```
@@ -90,10 +90,10 @@ type TimerState = {
   phase: "focus" | "shortBreak" | "longBreak";
   status: "idle" | "running" | "paused";
   plannedMs: number;
-  accumulatedMs: number;        // time elapsed before the current run
-  runningSince: number | null;  // epoch ms when the current run started
+  accumulatedMs: number; // time elapsed before the current run
+  runningSince: number | null; // epoch ms when the current run started
   phaseStartedAt: number | null;
-  completedFocusCount: number;  // drives the long break cycle
+  completedFocusCount: number; // drives the long break cycle
 };
 ```
 
@@ -110,19 +110,30 @@ The UI depends only on repository interfaces:
 ```ts
 type NewSession = Pick<
   Session,
-  "skillId" | "startedAt" | "endedAt" | "focusedSeconds" | "plannedSeconds" | "outcome"
+  | "skillId"
+  | "startedAt"
+  | "endedAt"
+  | "focusedSeconds"
+  | "plannedSeconds"
+  | "outcome"
 >;
 
 interface SkillRepository {
   list(options?: { includeArchived?: boolean }): Promise<Skill[]>;
   create(input: { name: string }): Promise<Skill>;
-  update(id: string, patch: Partial<Pick<Skill, "name" | "archivedAt">>): Promise<Skill>;
+  update(
+    id: string,
+    patch: Partial<Pick<Skill, "name" | "archivedAt">>,
+  ): Promise<Skill>;
   remove(id: string): Promise<void>;
   subscribe(listener: () => void): () => void;
 }
 
 interface SessionRepository {
-  listBySkill(skillId: string, range?: { from: string; to: string }): Promise<Session[]>;
+  listBySkill(
+    skillId: string,
+    range?: { from: string; to: string },
+  ): Promise<Session[]>;
   listRecent(limit: number): Promise<Session[]>;
   add(session: NewSession): Promise<Session>;
   remove(id: string): Promise<void>;
