@@ -1,1 +1,105 @@
 @import "tailwindcss";
+
+/*
+ * Design tokens. Art direction: design-taste-frontend, app style
+ * "achromatic-ledger". The chrome carries no hue; --data is the one hue and
+ * marks only the live or current data element. Components use these tokens
+ * through Tailwind classes (bg-surface, text-muted, ...), never raw values.
+ */
+:root {
+  color-scheme: light;
+  --ground: #f2f4f7;
+  --surface: #ffffff;
+  --raised: #eceef1;
+  --active: #e6e8eb;
+  --border: #e3e5e8;
+  --rule: #eef0f2;
+  --control: #d4d6d9;
+  --text: #0a0a0a;
+  --muted: #5f6368;
+  --primary: #141414;
+  --primary-ink: #ffffff;
+  --data: #1d5fbf;
+  --positive: #247b50;
+  --negative: #c4242a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ground: #000000;
+    --surface: #111111;
+    --raised: #1c1c1c;
+    --active: #222222;
+    --border: #262626;
+    --rule: #1a1a1a;
+    --control: #444444;
+    --text: #ffffff;
+    --muted: #b4b4b4;
+    --primary: #ffffff;
+    --primary-ink: #000000;
+    --data: #6b9be6;
+    --positive: #3fc07a;
+    --negative: #e5566f;
+  }
+}
+
+@theme {
+  /* Only token colours exist: the default palette is switched off. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-active: var(--active);
+  --color-border: var(--border);
+  --color-rule: var(--rule);
+  --color-control: var(--control);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-data: var(--data);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+
+  --text-small: 12px;
+  --text-small--line-height: 16px;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-section: 16px;
+  --text-section--line-height: 24px;
+  --text-title: 24px;
+  --text-title--line-height: 32px;
+  --text-kpi: 30px;
+  --text-kpi--line-height: 36px;
+
+  --radius-card: 8px;
+  --radius-control: 6px;
+}
+
+@layer base {
+  body {
+    @apply bg-ground font-sans text-body text-text antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--data);
+    color: var(--surface);
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+}
