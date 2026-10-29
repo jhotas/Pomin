@@ -158,6 +158,15 @@ describe("sessions", () => {
     expect(await repos.sessions.listBySkill(guitar.id)).toEqual([session]);
   });
 
+  test("adding the same block twice keeps one session", async () => {
+    const guitar = await repos.skills.create({ name: "Guitar" });
+    const block = focusBlock(guitar.id, "2026-10-29T10:00:00.000Z");
+    const first = await repos.sessions.add(block);
+    const second = await repos.sessions.add(block);
+    expect(second).toEqual(first);
+    expect(await repos.sessions.listBySkill(guitar.id)).toHaveLength(1);
+  });
+
   test("need an existing skill", async () => {
     const guitar = await repos.skills.create({ name: "Guitar" });
     await repos.skills.remove(guitar.id);

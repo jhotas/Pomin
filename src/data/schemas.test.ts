@@ -88,7 +88,6 @@ describe("settings", () => {
       autoStartBreaks: false,
       autoStartFocus: false,
       soundEnabled: true,
-      activeSkillId: null,
     });
   });
 

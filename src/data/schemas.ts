@@ -67,7 +67,6 @@ export const SettingsSchema = z.object({
   autoStartBreaks: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartBreaks),
   autoStartFocus: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartFocus),
   soundEnabled: z.boolean().default(true),
-  activeSkillId: Id.nullable().default(null),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

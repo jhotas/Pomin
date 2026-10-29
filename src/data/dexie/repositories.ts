@@ -184,7 +184,7 @@ function createSessionRepository({
 
     async add(input: NewSession) {
       const fields = NewSessionSchema.parse(input);
-      const session = await db.transaction(
+      const result = await db.transaction(
         "rw",
         db.skills,
         db.sessions,
@@ -193,6 +193,15 @@ function createSessionRepository({
           if (!skill || !isLive(skill)) {
             throw new RecordNotFoundError("skill", fields.skillId);
           }
+          // One block of one skill starts at one moment: a second add of the
+          // same block (another tab, a retried event) returns the first.
+          const existing = await db.sessions
+            .where("skillId")
+            .equals(fields.skillId)
+            .filter((row) => isLive(row) && row.startedAt === fields.startedAt)
+            .first();
+          if (existing) return { session: SessionSchema.parse(existing) };
+
           const at = now();
           const created = SessionSchema.parse({
             ...fields,
@@ -202,11 +211,11 @@ function createSessionRepository({
             deletedAt: null,
           });
           await db.sessions.add(created);
-          return created;
+          return { session: created, isNew: true };
         },
       );
-      notifier.notify();
-      return session;
+      if (result.isNew) notifier.notify();
+      return result.session;
     },
 
     async remove(id) {

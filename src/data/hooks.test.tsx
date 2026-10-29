@@ -1,8 +1,7 @@
 import "fake-indexeddb/auto";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test } from "vitest";
-import { PomoDatabase } from "./dexie/database";
-import { createDexieRepositories } from "./dexie/repositories";
+import type { PomoDatabase } from "./dexie/database";
 import {
   useRecentSessions,
   useSettings,
@@ -11,23 +10,14 @@ import {
   useSkillSessions,
 } from "./hooks";
 import { AppDataProvider, type AppData } from "./provider";
-import { createSettingsStore } from "./settings-store";
-import { minutesAfter, sequentialIds, steppingClock } from "./testing";
+import { createTestAppData } from "./test-app-data";
+import { minutesAfter } from "./testing";
 
 let db: PomoDatabase;
 let data: AppData;
-let dbCount = 0;
 
 beforeEach(() => {
-  localStorage.clear();
-  db = new PomoDatabase(`pomoapp-hooks-${++dbCount}`);
-  data = {
-    ...createDexieRepositories(db, {
-      now: steppingClock(),
-      newId: sequentialIds(),
-    }),
-    settings: createSettingsStore(localStorage),
-  };
+  ({ data, db } = createTestAppData());
 });
 
 afterEach(async () => {

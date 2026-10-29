@@ -79,6 +79,9 @@
   --text-title--line-height: 32px;
   --text-kpi: 30px;
   --text-kpi--line-height: 36px;
+  /* The countdown is an instrument read from across the desk, not a KPI. */
+  --text-clock: clamp(4.5rem, 13vw, 9rem);
+  --text-clock--line-height: 1;
 
   --radius-card: 8px;
   --radius-control: 6px;
