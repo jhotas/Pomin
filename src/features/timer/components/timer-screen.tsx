@@ -38,6 +38,17 @@ export function TimerScreen() {
 
   useTimerShortcuts(timer);
 
+  // The timer fills the window and never scrolls. Next keeps a page that was
+  // left in the document, hidden, so the mark goes on <html>, and only while
+  // this page is shown: a hidden page's effects are cleaned up.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.fullpage = "";
+    return () => {
+      delete root.dataset.fullpage;
+    };
+  }, []);
+
   const phaseLabel = PHASE_LABEL[state.phase];
   const clock = formatClock(timer.remainingMs);
   useDocumentTitle(
@@ -60,7 +71,6 @@ export function TimerScreen() {
       <h1 className="sr-only">Timer</h1>
       <section
         aria-label="Timer"
-        data-fullpage
         className="grid h-full content-center items-center gap-8 md:grid-cols-2"
       >
         <div className="flex flex-col items-center gap-6 md:gap-8">

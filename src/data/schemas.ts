@@ -55,6 +55,9 @@ export type Session = z.infer<typeof SessionSchema>;
 /** How long a phase can last, in minutes. */
 export const MINUTES_RANGE = { min: 1, max: 180 } as const;
 
+/** How many focus blocks make a round, before the long break. */
+export const LONG_BREAK_EVERY_RANGE = { min: 1, max: 12 } as const;
+
 const Minutes = z.number().int().min(MINUTES_RANGE.min).max(MINUTES_RANGE.max);
 
 export const SettingsSchema = z.object({
@@ -64,8 +67,8 @@ export const SettingsSchema = z.object({
   longBreakEvery: z
     .number()
     .int()
-    .min(1)
-    .max(12)
+    .min(LONG_BREAK_EVERY_RANGE.min)
+    .max(LONG_BREAK_EVERY_RANGE.max)
     .default(DEFAULT_TIMER_SETTINGS.longBreakEvery),
   autoStartBreaks: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartBreaks),
   autoStartFocus: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartFocus),

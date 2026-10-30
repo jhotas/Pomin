@@ -3,8 +3,9 @@
 import { Minus, Plus } from "lucide-react";
 import { useId, useState } from "react";
 import { useSettings } from "@/data/hooks";
-import { MINUTES_RANGE } from "@/data/schemas";
+import { LONG_BREAK_EVERY_RANGE, MINUTES_RANGE } from "@/data/schemas";
 import { buttonClass, iconButtonClass } from "@/ui/button";
+import { Switch } from "@/ui/switch";
 
 type MinutesKey = "focusMinutes" | "shortBreakMinutes" | "longBreakMinutes";
 
@@ -21,34 +22,40 @@ const PRESETS: [number, number, number][] = [
   [50, 10, 30],
 ];
 
-/** The steppers move in whole steps of this many minutes. */
-const STEP = 5;
-
-const isMinutes = (value: number) =>
-  Number.isInteger(value) &&
-  value >= MINUTES_RANGE.min &&
-  value <= MINUTES_RANGE.max;
-
-function MinutesField({
-  label,
-  value,
-  onChange,
-}: {
+type NumberFieldProps = {
   label: string;
   value: number;
-  onChange: (minutes: number) => void;
-}) {
+  min: number;
+  max: number;
+  /** The steppers move in whole steps of this size. */
+  step: number;
+  /** The unit, for the steppers' names: "minutes", "blocks". */
+  unit: string;
+  onChange: (value: number) => void;
+};
+
+/** A labelled number with a stepper on each side and a field to type in. */
+function NumberField({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit,
+  onChange,
+}: NumberFieldProps) {
   const id = useId();
   const hintId = useId();
-  // What is typed, until it is a valid length or the field loses focus.
+  // What is typed, until it is a valid value or the field loses focus.
   const [draft, setDraft] = useState<string | null>(null);
-  const invalid = draft !== null && !isMinutes(Number(draft));
-  // A typed length off the grid steps to the nearest multiple of STEP.
-  const less = Math.max(STEP, Math.ceil(value / STEP) * STEP - STEP);
-  const more = Math.min(
-    MINUTES_RANGE.max,
-    Math.floor(value / STEP) * STEP + STEP,
-  );
+  const isValid = (candidate: number) =>
+    Number.isInteger(candidate) && candidate >= min && candidate <= max;
+  const invalid = draft !== null && !isValid(Number(draft));
+  // A typed value off the grid steps to the nearest multiple of `step`.
+  const lowest = Math.ceil(min / step) * step;
+  const less = Math.max(lowest, Math.ceil(value / step) * step - step);
+  const more = Math.min(max, Math.floor(value / step) * step + step);
+  const name = label.toLowerCase();
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t-2 border-dashed border-rule py-4">
@@ -58,8 +65,8 @@ function MinutesField({
       <div className="flex items-center gap-2">
         <button
           type="button"
-          aria-label={`${STEP} minutes less of ${label.toLowerCase()}`}
-          disabled={value <= STEP}
+          aria-label={`${step} ${unit} less of ${name}`}
+          disabled={value <= lowest}
           onClick={() => onChange(less)}
           className={iconButtonClass("secondary")}
         >
@@ -69,26 +76,24 @@ function MinutesField({
           id={id}
           type="number"
           inputMode="numeric"
-          min={MINUTES_RANGE.min}
-          max={MINUTES_RANGE.max}
-          step={STEP}
+          min={min}
+          max={max}
+          step={step}
           value={draft ?? String(value)}
           aria-invalid={invalid || undefined}
           aria-describedby={invalid ? hintId : undefined}
           onChange={(event) => {
             setDraft(event.target.value);
-            const minutes = Number(event.target.value);
-            if (event.target.value !== "" && isMinutes(minutes)) {
-              onChange(minutes);
-            }
+            const typed = Number(event.target.value);
+            if (event.target.value !== "" && isValid(typed)) onChange(typed);
           }}
           onBlur={() => setDraft(null)}
           className="field w-20 [appearance:textfield] text-center font-display text-section font-medium num aria-invalid:border-negative [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
         <button
           type="button"
-          aria-label={`${STEP} minutes more of ${label.toLowerCase()}`}
-          disabled={value >= MINUTES_RANGE.max}
+          aria-label={`${step} ${unit} more of ${name}`}
+          disabled={value >= max}
           onClick={() => onChange(more)}
           className={iconButtonClass("secondary")}
         >
@@ -97,7 +102,7 @@ function MinutesField({
       </div>
       {invalid && (
         <p id={hintId} role="alert" className="w-full text-right text-negative">
-          Use {MINUTES_RANGE.min} to {MINUTES_RANGE.max} minutes.
+          Use {min} to {max} {unit}.
         </p>
       )}
     </div>
@@ -105,8 +110,9 @@ function MinutesField({
 }
 
 /**
- * The length of each phase in minutes, saved as it changes: presets that set
- * all three at once, then a stepper and a field for each.
+ * The timer's rhythm, saved as it changes: presets that set all three
+ * lengths at once, a stepper for each length and for the round, and whether
+ * the next phase starts by itself.
  */
 export function TimerSettings() {
   const [settings, update] = useSettings();
@@ -143,13 +149,51 @@ export function TimerSettings() {
         })}
       </div>
       {FIELDS.map(({ key, label }) => (
-        <MinutesField
+        <NumberField
           key={key}
           label={label}
           value={settings[key]}
+          min={MINUTES_RANGE.min}
+          max={MINUTES_RANGE.max}
+          step={5}
+          unit="minutes"
           onChange={(minutes) => update({ [key]: minutes })}
         />
       ))}
+      <NumberField
+        label="Focus blocks per round"
+        value={settings.longBreakEvery}
+        min={LONG_BREAK_EVERY_RANGE.min}
+        max={LONG_BREAK_EVERY_RANGE.max}
+        step={1}
+        unit="blocks"
+        onChange={(blocks) => update({ longBreakEvery: blocks })}
+      />
+      <Switch
+        label="Start breaks by themselves"
+        hint="A break begins as soon as a focus block ends."
+        checked={settings.autoStartBreaks}
+        onChange={(autoStartBreaks) => update({ autoStartBreaks })}
+      />
+      <Switch
+        label="Start focus by itself"
+        hint="The next focus block begins as soon as a break ends."
+        checked={settings.autoStartFocus}
+        onChange={(autoStartFocus) => update({ autoStartFocus })}
+      />
     </>
+  );
+}
+
+/** Whether the app makes its 8-bit sounds. */
+export function SoundSettings() {
+  const [settings, update] = useSettings();
+  return (
+    <Switch
+      label="Sound effects"
+      hint="Blips on buttons, a chime per focus block, a fanfare per round."
+      checked={settings.soundEnabled}
+      onChange={(soundEnabled) => update({ soundEnabled })}
+    />
   );
 }

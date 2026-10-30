@@ -12,8 +12,13 @@ import {
   type TimerAction,
   type TimerEvent,
 } from "./core/timer";
+import {
+  playBreakOver,
+  playPomoDone,
+  playVictory,
+  unlockAudio,
+} from "@/features/sound/chiptune";
 import type { TimerSnapshot } from "./timer-store";
-import { playVictory, unlockAudio } from "./victory-sound";
 
 const SERVER_SNAPSHOT: TimerSnapshot = {
   state: initialTimerState(DEFAULT_TIMER_SETTINGS),
@@ -24,18 +29,22 @@ const noSubscription = () => () => {};
 /** How often a running timer re-renders. Correctness does not depend on it. */
 const TICK_MS = 250;
 
-/** A round that ended longer ago than this (the tab was closed) is not cheered. */
+/** A phase that ended longer ago than this (the tab was closed) stays quiet. */
 const FRESH_MS = 10_000;
 
-/** The last focus block of a round ran out on its own, just now. */
-function roundJustEnded(events: TimerEvent[], now: number): boolean {
-  return events.some(
-    (event) =>
-      event.type === "phaseChanged" &&
-      event.from === "focus" &&
-      event.to === "longBreak" &&
-      now - event.at < FRESH_MS,
+/**
+ * Sounds the latest phase that ran out on its own just now: a fanfare for the
+ * end of a round, a chime for any other focus block, a call back to work at
+ * the end of a break.
+ */
+function soundPhaseEnd(events: TimerEvent[], now: number) {
+  const ended = events.findLast(
+    (event) => event.type === "phaseChanged" && now - event.at < FRESH_MS,
   );
+  if (ended?.type !== "phaseChanged") return;
+  if (ended.to === "longBreak") playVictory();
+  else if (ended.from === "focus") playPomoDone();
+  else playBreakOver();
 }
 
 /**
@@ -108,12 +117,9 @@ export function useTimer() {
       const events = data.timer.dispatch({ type }, at);
       setNow(at);
       recordSessions(data, events, skillId);
-      if (
-        type === "tick" &&
-        data.settings.get().soundEnabled &&
-        roundJustEnded(events, at)
-      ) {
-        playVictory();
+      // Only a tick ends a phase on its own; a skip is the person's doing.
+      if (type === "tick" && data.settings.get().soundEnabled) {
+        soundPhaseEnd(events, at);
       }
     },
     [data],

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ClickSounds } from "@/features/sound/click-sounds";
 import { PhaseBackdrop } from "@/features/timer/components/phase-backdrop";
 import { HeaderExtras } from "./header-extras";
 import { MainNav } from "./main-nav";
@@ -12,10 +13,11 @@ import { MainNav } from "./main-nav";
  */
 export function AppShell({ children }: { children: ReactNode }) {
   return (
-    // A page marked data-fullpage (the timer) fills the window exactly and
-    // never scrolls.
-    <div className="flex min-h-dvh flex-col has-[[data-fullpage]]:h-dvh has-[[data-fullpage]]:overflow-hidden">
+    // While <html> carries data-fullpage (the timer is shown), the page fills
+    // the window exactly and never scrolls.
+    <div className="flex min-h-dvh flex-col in-data-fullpage:h-dvh in-data-fullpage:overflow-hidden">
       <PhaseBackdrop />
+      <ClickSounds />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded-full focus:bg-sun focus:px-3 focus:py-2"
