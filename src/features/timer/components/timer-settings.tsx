@@ -185,15 +185,52 @@ export function TimerSettings() {
   );
 }
 
-/** Whether the app makes its 8-bit sounds. */
+/** Whether the app makes its 8-bit sounds and shows notifications. */
 export function SoundSettings() {
   const [settings, update] = useSettings();
+  // Why notifications could not be turned on, when they could not.
+  const [refusal, setRefusal] = useState<string | null>(null);
+
+  async function setNotifications(on: boolean) {
+    setRefusal(null);
+    if (!on) {
+      update({ notificationsEnabled: false });
+      return;
+    }
+    if (!("Notification" in window)) {
+      setRefusal("This browser cannot show notifications.");
+      return;
+    }
+    // A refused permission answers at once, without asking again.
+    const permission =
+      Notification.permission === "granted"
+        ? "granted"
+        : await Notification.requestPermission();
+    if (permission === "granted") update({ notificationsEnabled: true });
+    else {
+      setRefusal(
+        "Notifications are blocked for this site. Allow them in the browser's site settings, then try again.",
+      );
+    }
+  }
+
   return (
-    <Switch
-      label="Sound effects"
-      hint="Blips on buttons, a chime per focus block, a fanfare per round."
-      checked={settings.soundEnabled}
-      onChange={(soundEnabled) => update({ soundEnabled })}
-    />
+    <>
+      <Switch
+        label="Sound effects"
+        hint="Blips on buttons, a chime per focus block, a fanfare per round."
+        checked={settings.soundEnabled}
+        onChange={(soundEnabled) => update({ soundEnabled })}
+      />
+      <Switch
+        label="Notifications"
+        hint={
+          refusal ??
+          "A note from the browser when a phase ends while pomoapp is out of sight."
+        }
+        checked={settings.notificationsEnabled}
+        onChange={(on) => void setNotifications(on)}
+      />
+    </>
   );
 }

@@ -29,8 +29,8 @@ export default function SettingsPage() {
           <TimerSettings />
         </SettingsSection>
         <SettingsSection
-          title="Sound"
-          description="Short 8-bit sounds, made in the browser."
+          title="Sound and alerts"
+          description="Short 8-bit sounds made in the browser, and a nudge when a phase ends while you are elsewhere."
         >
           <SoundSettings />
         </SettingsSection>

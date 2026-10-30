@@ -5,6 +5,7 @@ import { useSettings } from "@/data/hooks";
 import { useAppData, type AppData } from "@/data/provider";
 import { RecordNotFoundError } from "@/data/repositories";
 import type { NewSession } from "@/data/schemas";
+import { unlockAudio } from "@/features/sound/chiptune";
 import {
   DEFAULT_TIMER_SETTINGS,
   initialTimerState,
@@ -12,12 +13,7 @@ import {
   type TimerAction,
   type TimerEvent,
 } from "./core/timer";
-import {
-  playBreakOver,
-  playPomoDone,
-  playVictory,
-  unlockAudio,
-} from "@/features/sound/chiptune";
+import { alertPhaseEnd } from "./phase-alerts";
 import type { TimerSnapshot } from "./timer-store";
 
 const SERVER_SNAPSHOT: TimerSnapshot = {
@@ -28,24 +24,6 @@ const noSubscription = () => () => {};
 
 /** How often a running timer re-renders. Correctness does not depend on it. */
 const TICK_MS = 250;
-
-/** A phase that ended longer ago than this (the tab was closed) stays quiet. */
-const FRESH_MS = 10_000;
-
-/**
- * Sounds the latest phase that ran out on its own just now: a fanfare for the
- * end of a round, a chime for any other focus block, a call back to work at
- * the end of a break.
- */
-function soundPhaseEnd(events: TimerEvent[], now: number) {
-  const ended = events.findLast(
-    (event) => event.type === "phaseChanged" && now - event.at < FRESH_MS,
-  );
-  if (ended?.type !== "phaseChanged") return;
-  if (ended.to === "longBreak") playVictory();
-  else if (ended.from === "focus") playPomoDone();
-  else playBreakOver();
-}
 
 /**
  * The clock is read only in the browser. On the server the timer is always the
@@ -118,9 +96,7 @@ export function useTimer() {
       setNow(at);
       recordSessions(data, events, skillId);
       // Only a tick ends a phase on its own; a skip is the person's doing.
-      if (type === "tick" && data.settings.get().soundEnabled) {
-        soundPhaseEnd(events, at);
-      }
+      if (type === "tick") alertPhaseEnd(events, at, data.settings.get());
     },
     [data],
   );

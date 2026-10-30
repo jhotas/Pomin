@@ -73,6 +73,8 @@ export const SettingsSchema = z.object({
   autoStartBreaks: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartBreaks),
   autoStartFocus: z.boolean().default(DEFAULT_TIMER_SETTINGS.autoStartFocus),
   soundEnabled: z.boolean().default(true),
+  /** Asks the browser to notify when a phase ends out of sight. */
+  notificationsEnabled: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

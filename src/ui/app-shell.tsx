@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ClickSounds } from "@/features/sound/click-sounds";
 import { PhaseBackdrop } from "@/features/timer/components/phase-backdrop";
+import { TimerHeartbeat } from "@/features/timer/components/timer-heartbeat";
 import { HeaderExtras } from "./header-extras";
 import { MainNav } from "./main-nav";
 
@@ -18,6 +19,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-dvh flex-col in-data-fullpage:h-dvh in-data-fullpage:overflow-hidden">
       <PhaseBackdrop />
       <ClickSounds />
+      <TimerHeartbeat />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded-full focus:bg-sun focus:px-3 focus:py-2"
