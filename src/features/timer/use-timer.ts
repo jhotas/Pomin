@@ -95,8 +95,11 @@ export function useTimer() {
       const events = data.timer.dispatch({ type }, at);
       setNow(at);
       recordSessions(data, events, skillId);
-      // Only a tick ends a phase on its own; a skip is the person's doing.
-      if (type === "tick") alertPhaseEnd(events, at, data.settings.get());
+      // A phase ends when it runs out (a tick) or is skipped, which counts
+      // as finishing it.
+      if (type === "tick" || type === "skip") {
+        alertPhaseEnd(events, at, data.settings.get());
+      }
     },
     [data],
   );

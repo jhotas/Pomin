@@ -27,9 +27,10 @@ function notice(ended: PhaseChanged): { title: string; body: string } {
 }
 
 /**
- * Marks the latest phase that ran out on its own just now: a fanfare for the
- * end of a round, a chime for any other focus block, a call back to work at
- * the end of a break; and, while the tab is out of sight, a notification.
+ * Marks the latest phase that ended just now, run out or skipped: a fanfare
+ * for the end of a round, a chime for any other focus block, a call back to
+ * work at the end of a break; and, while the tab is out of sight, a
+ * notification.
  */
 export function alertPhaseEnd(
   events: TimerEvent[],
