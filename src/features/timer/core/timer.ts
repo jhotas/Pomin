@@ -149,8 +149,6 @@ function nextPhase(
 }
 
 /** The session an early-ended focus block leaves behind, if it counts. */
-function interruptedFocus(state: TimerState, now: number): TimerEvent[] {
-  if (state.phase !== "focus" || state.phaseStartedAt === null) return [];
 /**
  * Skipping a focus block that has started finishes it: it counts as completed
  * and in full, as if it had run to the end.
@@ -169,6 +167,8 @@ function skippedFocus(state: TimerState, now: number): TimerEvent[] {
   ];
 }
 
+function interruptedFocus(state: TimerState, now: number): TimerEvent[] {
+  if (state.phase !== "focus" || state.phaseStartedAt === null) return [];
   const focusedMs = elapsedMs(state, now);
   if (focusedMs < MIN_FOCUS_MS) return [];
   return [
@@ -272,16 +272,16 @@ export function timerReducer(
       return tick(state, now, settings);
 
     case "skip": {
-      const next = nextPhase(state, settings);
-      return {
       // Like a phase that ran out: the next one starts by itself if set to.
-        state: autoStart
-          ? runningPhase(next.phase, settings, next.completedFocusCount, now)
-          : idlePhase(next.phase, settings, next.completedFocusCount),
+      const next = nextPhase(state, settings);
       const autoStart =
         next.phase === "focus"
           ? settings.autoStartFocus
           : settings.autoStartBreaks;
+      return {
+        state: autoStart
+          ? runningPhase(next.phase, settings, next.completedFocusCount, now)
+          : idlePhase(next.phase, settings, next.completedFocusCount),
         events: [
           ...skippedFocus(state, now),
           { type: "phaseChanged", from: state.phase, to: next.phase, at: now },
