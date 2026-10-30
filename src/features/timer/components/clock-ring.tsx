@@ -8,8 +8,6 @@ type ClockRingProps = {
   stroke: string;
   /** The phase and its state, for screen readers. */
   status: string;
-  /** Shown above the time inside the ring. */
-  above?: ReactNode;
   /** The controls, set under the time inside the ring. */
   children: ReactNode;
 };
@@ -19,15 +17,14 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /**
  * The countdown inside a thick ring that fills in the phase's colour as the
- * phase runs, with the controls under the time and anything else above it.
- * The phase is announced to screen readers.
+ * phase runs, with the controls under the time. Only the time is shown; the
+ * phase is announced to screen readers.
  */
 export function ClockRing({
   clock,
   share,
   stroke,
   status,
-  above,
   children,
 }: ClockRingProps) {
   const filled = Math.min(1, Math.max(0, share)) * CIRCUMFERENCE;
@@ -63,8 +60,7 @@ export function ClockRing({
           strokeDasharray={`${filled} ${CIRCUMFERENCE}`}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-[5%]">
-        {above}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-[5%] pt-[6%]">
         <div
           role="timer"
           aria-label="Time left"
