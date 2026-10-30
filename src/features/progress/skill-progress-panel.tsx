@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Session, Skill } from "@/data/schemas";
 import { formatHours } from "@/lib/time";
+import { buttonClass } from "@/ui/button";
+import { Pomo } from "@/ui/pomo";
 import { MasteryGrid } from "./mastery-grid";
 import { totalFocusedSeconds } from "./progress";
 
@@ -28,13 +30,18 @@ export function SkillProgressPanel({
   return (
     <section
       aria-labelledby="skill-progress-title"
-      className="rounded-card border border-border bg-surface p-5"
+      className="card bg-surface p-5"
     >
-      <h2 id="skill-progress-title" className="text-section font-medium">
-        {skill?.name ?? "Your first skill"}
-      </h2>
-      <p className="mt-3 num">
-        <span className="text-kpi font-medium">{formatHours(total)}</span>
+      <div className="flex items-start justify-between gap-3">
+        <h2 id="skill-progress-title" className="text-section font-semibold">
+          {skill?.name ?? "Your first skill"}
+        </h2>
+        <Pomo mood={total > 0 ? "proud" : "happy"} size={44} />
+      </div>
+      <p className="mt-1 num">
+        <span className="font-display text-kpi font-semibold">
+          {formatHours(total)}
+        </span>
         <span className="text-muted">
           {" "}
           of {hoursFormat.format(target)} hours
@@ -48,7 +55,7 @@ export function SkillProgressPanel({
       {skill && (
         <Link
           href={`/skills/${skill.id}`}
-          className="mt-5 inline-block font-medium underline-offset-4 hover:underline"
+          className={`${buttonClass("secondary")} mt-5`}
         >
           View progress
         </Link>

@@ -160,10 +160,11 @@ The document title shows the remaining time while running, for example `18:42 ·
 
 ## 7. Design direction
 
-Art direction is decided in part 2 with the `design-taste-frontend` skill, using its app-screen mode and browser inspector. Fixed constraints:
+Art direction was first decided in part 2 with the `design-taste-frontend` skill. On 2026-10-30 the user asked for a playful look instead, after a mascot-led pomodoro brand. The current direction:
 
-- Typography and spacing carry the hierarchy. No gradients, glass effects, drop shadows at rest, emoji or decorative icons.
-- One restrained accent color. One light theme, whatever the system setting (the user chose it over a dark theme).
+- A sticker-book look: a white page, a cream sidebar, chunky ink outlines with hard offset shadows (no soft shadows, gradients or glass), rounded type (Fredoka for display, Nunito for text).
+- Flat colour fields: tomato is the accent and the focus phase, sky the short break, leaf the long break. One light theme, whatever the system setting.
+- Pomo, an original tomato mascot drawn in SVG, shows the timer's mood (happy, focused, resting, proud). It is decorative: every state it shows is also stated in words. No emoji.
 - The countdown is the visual focus of the timer screen.
 - All design values live as tokens in Tailwind's theme. Components never use raw hex values.
 - WCAG 2.2 AA contrast, visible focus states, full keyboard use, and `prefers-reduced-motion` respected.

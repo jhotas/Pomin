@@ -9,7 +9,7 @@ type NavListProps = {
 export function NavList({ pathname, onNavigate }: NavListProps) {
   return (
     <nav aria-label="Main">
-      <ul className="flex flex-col gap-0.5">
+      <ul className="flex flex-col gap-1.5">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const active = isActivePath(href, pathname);
           return (
@@ -18,13 +18,13 @@ export function NavList({ pathname, onNavigate }: NavListProps) {
                 href={href}
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-11 items-center gap-2.5 rounded-control px-2.5 transition-colors md:h-8 ${
+                className={`flex h-11 items-center gap-2.5 rounded-full border-2 px-3.5 font-display font-medium transition-colors md:h-10 ${
                   active
-                    ? "bg-tint text-text"
-                    : "text-muted hover:bg-raised hover:text-text"
+                    ? "border-text bg-primary text-primary-ink shadow-sticker-sm"
+                    : "border-transparent text-muted hover:bg-active hover:text-text"
                 }`}
               >
-                <Icon aria-hidden size={16} strokeWidth={1.5} />
+                <Icon aria-hidden size={18} strokeWidth={2} />
                 {label}
               </Link>
             </li>

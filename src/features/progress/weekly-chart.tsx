@@ -4,9 +4,9 @@ import { niceTicks } from "./progress";
 type Week = { start: Date; seconds: number };
 
 /**
- * Focused hours per week as columns. The current week, the last column,
- * carries the data hue; past weeks are grey. Drawn in HTML so the labels stay
- * crisp at every width.
+ * Focused hours per week as columns. The current week, the last column, is
+ * tomato; past weeks are peach. Drawn in HTML so the labels stay crisp at
+ * every width.
  */
 export function WeeklyChart({ weeks }: { weeks: readonly Week[] }) {
   const hours = weeks.map((week) => week.seconds / 3600);
@@ -27,7 +27,9 @@ export function WeeklyChart({ weeks }: { weeks: readonly Week[] }) {
             key={tick}
             aria-hidden
             className={`absolute inset-x-0 border-t ${
-              tick === 0 ? "border-control" : "border-rule"
+              tick === 0
+                ? "border-t-2 border-text"
+                : "border-dashed border-rule"
             }`}
             style={{ bottom: `${(tick / top) * 100}%` }}
           >
@@ -40,9 +42,9 @@ export function WeeklyChart({ weeks }: { weeks: readonly Week[] }) {
           {hours.map((value, index) => (
             <div
               key={index}
-              className={`flex-1 rounded-t-xs ${
-                index === hours.length - 1 ? "bg-data" : "bg-control"
-              }`}
+              className={`flex-1 rounded-t-xl ${
+                value > 0 ? "border-2 border-b-0 border-text" : ""
+              } ${index === hours.length - 1 ? "bg-primary" : "bg-peach"}`}
               style={{ height: `${(value / top) * 100}%` }}
             />
           ))}

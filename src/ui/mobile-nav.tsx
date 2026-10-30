@@ -28,7 +28,7 @@ export function MobileNav() {
   }
 
   return (
-    <div className="flex h-12 items-center justify-between border-b border-border bg-ground px-4 md:hidden">
+    <div className="flex h-14 items-center justify-between border-b-2 border-text bg-cream px-4 md:hidden">
       <Link href="/">
         <Logo />
       </Link>
@@ -36,9 +36,9 @@ export function MobileNav() {
         ref={openButtonRef}
         type="button"
         onClick={() => setOpen(true)}
-        className="-mr-2 flex size-11 items-center justify-center rounded-control text-text hover:bg-raised"
+        className="-mr-2 flex size-11 items-center justify-center rounded-full text-text hover:bg-active"
       >
-        <Menu aria-hidden size={20} strokeWidth={1.5} />
+        <Menu aria-hidden size={22} strokeWidth={2.25} />
         <span className="sr-only">Open menu</span>
       </button>
 
@@ -56,17 +56,17 @@ export function MobileNav() {
               close();
             }
           }}
-          className="m-0 flex h-dvh max-h-none w-full max-w-none flex-col bg-ground p-4 text-text backdrop:bg-ground"
+          className="m-0 flex h-dvh max-h-none w-full max-w-none flex-col bg-cream p-4 text-text backdrop:bg-cream"
         >
-          <div className="flex h-12 items-center justify-between">
+          <div className="flex h-14 items-center justify-between">
             <Logo />
             <button
               ref={closeButtonRef}
               type="button"
               onClick={close}
-              className="-mr-2 flex size-11 items-center justify-center rounded-control hover:bg-raised"
+              className="-mr-2 flex size-11 items-center justify-center rounded-full hover:bg-active"
             >
-              <X aria-hidden size={20} strokeWidth={1.5} />
+              <X aria-hidden size={22} strokeWidth={2.25} />
               <span className="sr-only">Close menu</span>
             </button>
           </div>

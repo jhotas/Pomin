@@ -122,7 +122,7 @@ function SignInForm({ store }: { store: AccountStore }) {
   return (
     <>
       <form onSubmit={sendLink} noValidate>
-        <label htmlFor={fieldId} className="block font-medium">
+        <label htmlFor={fieldId} className="block font-semibold">
           Email
         </label>
         <div className="mt-2 flex flex-wrap gap-3">
@@ -135,7 +135,7 @@ function SignInForm({ store }: { store: AccountStore }) {
             inputMode="email"
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? errorId : undefined}
-            className="h-11 min-w-56 flex-1 rounded-control border border-control bg-surface px-3 placeholder:text-muted md:h-9"
+            className="field min-w-56 flex-1 placeholder:text-muted"
             placeholder="name@example.com"
           />
           <button

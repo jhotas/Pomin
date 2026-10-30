@@ -48,7 +48,7 @@ export function AddSkillForm({
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      <label htmlFor={fieldId} className="block font-medium">
+      <label htmlFor={fieldId} className="block font-semibold">
         Skill name
       </label>
       <div className="mt-2 flex flex-wrap gap-3">
@@ -60,7 +60,7 @@ export function AddSkillForm({
           autoComplete="off"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className="h-11 min-w-0 flex-1 rounded-control border border-control bg-surface px-3 placeholder:text-muted md:h-9"
+          className="field flex-1 placeholder:text-muted"
           placeholder="Guitar, Spanish, Chess…"
         />
         <button

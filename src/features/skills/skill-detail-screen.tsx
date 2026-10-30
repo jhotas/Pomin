@@ -28,6 +28,8 @@ import { buttonClass } from "@/ui/button";
 import { PageHeader } from "@/ui/page-header";
 
 const HISTORY_ROWS = 8;
+/** The four figures each sit on their own colour field. */
+const FIGURE_COLORS = ["bg-tint", "bg-sky-soft", "bg-cream", "bg-leaf-soft"];
 const hoursFormat = new Intl.NumberFormat("en-US");
 
 export function SkillDetailScreen({ skillId }: { skillId: string }) {
@@ -122,32 +124,32 @@ function SkillDetail({
 
       <ul
         aria-label="Figures"
-        className="mb-3 grid grid-cols-2 rounded-card border border-border bg-surface md:grid-cols-4"
+        className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5"
       >
         {figures.map((figure, index) => (
           <li
             key={figure.label}
-            className={`p-5 ${index > 0 ? "md:border-l md:border-border" : ""} ${
-              index % 2 === 1 ? "max-md:border-l max-md:border-border" : ""
-            } ${index > 1 ? "max-md:border-t max-md:border-border" : ""}`}
+            className={`card p-4 md:p-5 ${FIGURE_COLORS[index % FIGURE_COLORS.length]}`}
           >
-            <p className="text-muted">{figure.label}</p>
+            <p className="font-semibold text-muted">{figure.label}</p>
             {figure.value === null ? (
-              <p className="mt-1 text-kpi text-muted">—</p>
+              <p className="mt-1 font-display text-kpi text-muted">—</p>
             ) : (
-              <p className="mt-1 text-kpi font-medium num">{figure.value}</p>
+              <p className="mt-1 font-display text-kpi font-semibold num">
+                {figure.value}
+              </p>
             )}
           </li>
         ))}
       </ul>
 
-      <div className="grid gap-3 lg:grid-cols-3 lg:items-start">
+      <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
         <section
           aria-labelledby="weekly-title"
-          className="rounded-card border border-border bg-surface p-5 lg:col-span-2"
+          className="card bg-surface p-5 lg:col-span-2"
         >
           <div className="mb-4 flex items-baseline justify-between gap-3">
-            <h2 id="weekly-title" className="text-section font-medium">
+            <h2 id="weekly-title" className="text-section font-semibold">
               Hours per week
             </h2>
             <p className="text-small text-muted">Last 8 weeks</p>
@@ -155,11 +157,8 @@ function SkillDetail({
           <WeeklyChart weeks={weeks} />
         </section>
 
-        <section
-          aria-labelledby="grid-title"
-          className="rounded-card border border-border bg-surface p-5"
-        >
-          <h2 id="grid-title" className="text-section font-medium">
+        <section aria-labelledby="grid-title" className="card bg-surface p-5">
+          <h2 id="grid-title" className="text-section font-semibold">
             Toward {target} hours
           </h2>
           <p className="mb-4 text-small text-muted num">
@@ -188,10 +187,10 @@ function SessionHistory({
   return (
     <section
       aria-labelledby="history-title"
-      className="rounded-card border border-border bg-surface p-5 lg:col-span-2"
+      className="card bg-surface p-5 lg:col-span-2"
     >
       <div className="flex items-baseline justify-between gap-3">
-        <h2 id="history-title" className="text-section font-medium">
+        <h2 id="history-title" className="text-section font-semibold">
           Sessions
         </h2>
         <p className="text-small text-muted num">
@@ -207,7 +206,7 @@ function SessionHistory({
           {shown.map((session) => (
             <li
               key={session.id}
-              className="flex items-baseline justify-between gap-3 border-b border-rule py-2 last:border-b-0"
+              className="flex items-baseline justify-between gap-3 border-b-2 border-dashed border-rule py-2.5 last:border-b-0"
             >
               <span className="text-muted num">
                 {formatDayLabel(session.startedAt, now)} ·{" "}
@@ -268,16 +267,13 @@ function ManageSkill({
   }
 
   return (
-    <section
-      aria-labelledby="manage-title"
-      className="rounded-card border border-border bg-surface p-5"
-    >
-      <h2 id="manage-title" className="text-section font-medium">
+    <section aria-labelledby="manage-title" className="card bg-surface p-5">
+      <h2 id="manage-title" className="text-section font-semibold">
         Manage
       </h2>
 
       <form key={skill.name} onSubmit={rename} noValidate className="mt-4">
-        <label htmlFor={fieldId} className="block font-medium">
+        <label htmlFor={fieldId} className="block font-semibold">
           Name
         </label>
         <div className="mt-2 flex gap-3">
@@ -289,7 +285,7 @@ function ManageSkill({
             autoComplete="off"
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? errorId : undefined}
-            className="h-11 min-w-0 flex-1 rounded-control border border-control bg-surface px-3 md:h-9"
+            className="field flex-1"
           />
           <button type="submit" className={buttonClass("secondary")}>
             Save name
@@ -302,7 +298,7 @@ function ManageSkill({
         )}
       </form>
 
-      <div className="mt-5 border-t border-rule pt-5">
+      <div className="mt-5 border-t-2 border-dashed border-rule pt-5">
         <p className="text-muted">
           {skill.archivedAt
             ? "Archived skills keep their hours but leave the timer's list."
@@ -317,7 +313,7 @@ function ManageSkill({
         </button>
       </div>
 
-      <div className="mt-5 border-t border-rule pt-5">
+      <div className="mt-5 border-t-2 border-dashed border-rule pt-5">
         {confirming ? (
           <>
             <p>

@@ -11,6 +11,7 @@ import { formatDuration } from "@/lib/time";
 import { useNow } from "@/lib/use-now";
 import { EmptyState } from "@/ui/empty-state";
 import { PageHeader } from "@/ui/page-header";
+import { Pomo } from "@/ui/pomo";
 import { AddSkillForm } from "./add-skill-form";
 
 const percentFormat = new Intl.NumberFormat("en-US", {
@@ -54,15 +55,19 @@ export function SkillsScreen() {
   return (
     <>
       <PageHeader title="Skills" description={description} />
-      <div className="grid gap-3 lg:grid-cols-3 lg:items-start">
+      <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
         <section
           aria-label="Your skills"
-          className="rounded-card border border-border bg-surface p-5 lg:col-span-2"
+          className="card bg-surface p-5 lg:col-span-2"
         >
           {loaded && active.length === 0 && archived.length === 0 && (
-            <EmptyState>
-              No skills yet. Each skill keeps its own count toward 10,000 hours.
-            </EmptyState>
+            <div className="flex items-center gap-4">
+              <Pomo mood="happy" size={72} className="shrink-0 animate-bob" />
+              <EmptyState>
+                No skills yet. Each skill keeps its own count toward 10,000
+                hours.
+              </EmptyState>
+            </div>
           )}
           {loaded && active.length > 0 && (
             <SkillList
@@ -74,7 +79,7 @@ export function SkillsScreen() {
           )}
           {loaded && archived.length > 0 && (
             <>
-              <h2 className="mt-6 mb-1 font-medium">Archived</h2>
+              <h2 className="mt-7 mb-2 text-section font-semibold">Archived</h2>
               <SkillList
                 label="Archived"
                 skills={archived}
@@ -87,9 +92,9 @@ export function SkillsScreen() {
 
         <section
           aria-labelledby="add-skill-title"
-          className="rounded-card border border-border bg-surface p-5"
+          className="card bg-surface p-5"
         >
-          <h2 id="add-skill-title" className="mb-4 text-section font-medium">
+          <h2 id="add-skill-title" className="mb-4 text-section font-semibold">
             Add a skill
           </h2>
           <AddSkillForm variant="primary" />
@@ -98,6 +103,9 @@ export function SkillsScreen() {
     </>
   );
 }
+
+/** Each skill gets a badge colour by its place in the list. */
+const BADGE_COLORS = ["bg-primary", "bg-sky", "bg-sun", "bg-leaf-soft"];
 
 function SkillList({
   label,
@@ -111,26 +119,36 @@ function SkillList({
   now: Date | null;
 }) {
   return (
-    <ul aria-label={label}>
-      {skills.map((skill) => {
+    <ul aria-label={label} className="flex flex-col gap-3">
+      {skills.map((skill, index) => {
         const own = sessions.filter((session) => session.skillId === skill.id);
         const total = totalFocusedSeconds(own);
         const thisWeek = now ? (weeklyTotals(own, now, 1)[0]?.seconds ?? 0) : 0;
         const percent = (total / 3600 / skill.targetHours) * 100;
         return (
-          <li key={skill.id} className="border-b border-rule last:border-b-0">
+          <li key={skill.id}>
             <Link
               href={`/skills/${skill.id}`}
-              className="-mx-2 flex items-center justify-between gap-4 rounded-control px-2 py-3 hover:bg-raised"
+              className="flex items-center gap-4 rounded-2xl border-2 border-text bg-surface p-3 transition hover:-translate-y-0.5 hover:bg-cream hover:shadow-sticker-sm"
             >
-              <span className="min-w-0">
-                <span className="block truncate font-medium">{skill.name}</span>
+              <span
+                aria-hidden
+                className={`flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-text font-display text-section font-semibold ${
+                  BADGE_COLORS[index % BADGE_COLORS.length]
+                }`}
+              >
+                {skill.name.trim().charAt(0).toUpperCase()}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-display text-section font-semibold">
+                  {skill.name}
+                </span>
                 <span className="block text-small text-muted num">
                   {formatDuration(thisWeek)} this week
                 </span>
               </span>
               <span className="shrink-0 text-right num">
-                <span className="block font-medium">
+                <span className="block font-display text-section font-semibold">
                   {tenthsFormat.format(tenthsOfHours(sessions, skill.id) / 10)}{" "}
                   h
                 </span>

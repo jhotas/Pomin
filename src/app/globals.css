@@ -1,32 +1,39 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. A warm ledger on a white page: cream cards, warm ink, and
- * one pastel red. The app has one light theme, whatever the system setting.
- * --primary fills the main action; --data (a deeper shade of the same red, so
- * it holds 3:1 against the cards) marks the live or current data element;
- * --tint is the soft red of a selected place, such as the current page.
- * --negative is a darker brick, so a destructive action never reads as the
- * accent. Components use these tokens through Tailwind classes (bg-surface,
- * text-muted, ...), never raw values.
+ * Design tokens. A playful sticker-book look: a white page, chunky ink
+ * outlines with hard offset shadows, rounded type, and flat fields of tomato,
+ * sky and leaf. Each timer phase owns a colour (focus tomato, short break
+ * sky, long break leaf), and Pomo, the tomato mascot, carries the mood.
+ * Ink on tomato holds 4.8:1, so tomato fills can carry ink labels. The app has
+ * one light theme, whatever the system setting. Components use these tokens
+ * through Tailwind classes (bg-surface, text-muted, ...), never raw values.
  */
 :root {
   color-scheme: light;
   --ground: #ffffff;
-  --surface: #fcf7f0;
-  --raised: #efe5d6;
-  --active: #e8dccb;
-  --border: #e8dccb;
-  --rule: #f0e7da;
-  --control: #c9b8a2;
-  --tint: #f6d9d3;
-  --text: #2a211d;
-  --muted: #6b5d53;
-  --primary: #ec8b80;
-  --primary-ink: #2a211d;
-  --data: #cc5a50;
-  --positive: #3d7a4c;
-  --negative: #a3312a;
+  --surface: #ffffff;
+  --cream: #fff4e2;
+  --raised: #fff4e2;
+  --active: #ffe9c9;
+  --border: #2b1d1f;
+  --rule: #f1e4d4;
+  --control: #2b1d1f;
+  --text: #2b1d1f;
+  --muted: #6e5c5f;
+  --primary: #ef5a4c;
+  --primary-ink: #2b1d1f;
+  --data: #ef5a4c;
+  --tint: #ffe0d9;
+  --sky: #7fd3ef;
+  --sky-soft: #dcf3fb;
+  --leaf: #3f9b5a;
+  --leaf-soft: #dcf2e1;
+  --sun: #ffcf5c;
+  --peach: #ffd7b5;
+  --blush: #ff9eaa;
+  --positive: #2f7d47;
+  --negative: #b42a2a;
 }
 
 @theme {
@@ -39,6 +46,7 @@
 @theme inline {
   --color-ground: var(--ground);
   --color-surface: var(--surface);
+  --color-cream: var(--cream);
   --color-raised: var(--raised);
   --color-active: var(--active);
   --color-border: var(--border);
@@ -50,27 +58,39 @@
   --color-primary: var(--primary);
   --color-primary-ink: var(--primary-ink);
   --color-data: var(--data);
+  --color-sky: var(--sky);
+  --color-sky-soft: var(--sky-soft);
+  --color-leaf: var(--leaf);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-sun: var(--sun);
+  --color-peach: var(--peach);
   --color-positive: var(--positive);
   --color-negative: var(--negative);
 
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --font-display:
+    var(--font-fredoka), var(--font-nunito), system-ui, sans-serif;
 
-  --text-small: 12px;
-  --text-small--line-height: 16px;
-  --text-body: 14px;
-  --text-body--line-height: 20px;
-  --text-section: 16px;
-  --text-section--line-height: 24px;
-  --text-title: 24px;
-  --text-title--line-height: 32px;
-  --text-kpi: 30px;
-  --text-kpi--line-height: 36px;
+  --text-small: 13px;
+  --text-small--line-height: 18px;
+  --text-body: 15px;
+  --text-body--line-height: 22px;
+  --text-section: 18px;
+  --text-section--line-height: 26px;
+  --text-title: 32px;
+  --text-title--line-height: 38px;
+  --text-kpi: 32px;
+  --text-kpi--line-height: 38px;
   /* The countdown is an instrument read from across the desk, not a KPI. */
   --text-clock: clamp(4.5rem, 13vw, 9rem);
   --text-clock--line-height: 1;
 
-  --radius-card: 8px;
-  --radius-control: 6px;
+  --radius-card: 20px;
+  --radius-control: 12px;
+
+  --shadow-sticker: 4px 4px 0 var(--text);
+  --shadow-sticker-sm: 3px 3px 0 var(--text);
+  --shadow-pressed: 1px 1px 0 var(--text);
 }
 
 @layer base {
@@ -78,17 +98,56 @@
     @apply bg-ground font-sans text-body text-text antialiased;
   }
 
+  h1,
+  h2 {
+    @apply font-display;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--text);
+    outline: 3px solid var(--sky);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--data);
-    color: var(--surface);
+    background: var(--sun);
+    color: var(--text);
   }
+}
+
+/* A sticker: ink outline, rounded corners, hard shadow. Pair with a bg-*. */
+@utility card {
+  border: 2px solid var(--text);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sticker);
+}
+
+/* Text fields and selects share the sticker outline, without the shadow. */
+@utility field {
+  height: 2.75rem;
+  min-width: 0;
+  border: 2px solid var(--text);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  padding-inline: 0.875rem;
 }
 
 @utility num {
   font-variant-numeric: tabular-nums;
+}
+
+/* Pomo bobs gently; still for anyone who asks for reduced motion. */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@utility animate-bob {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: bob 2.4s ease-in-out infinite;
+  }
 }
