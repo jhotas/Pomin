@@ -67,7 +67,7 @@ export function TimerScreen() {
               >
                 <Play
                   aria-hidden
-                  size={22}
+                  size={18}
                   strokeWidth={2.5}
                   fill="currentColor"
                 />
@@ -81,7 +81,7 @@ export function TimerScreen() {
               >
                 <Pause
                   aria-hidden
-                  size={22}
+                  size={18}
                   strokeWidth={2.5}
                   fill="currentColor"
                 />
@@ -93,7 +93,7 @@ export function TimerScreen() {
                 aria-label="Reset"
                 className={iconButtonClass("secondary")}
               >
-                <RotateCcw aria-hidden size={22} strokeWidth={2.5} />
+                <RotateCcw aria-hidden size={18} strokeWidth={2.5} />
               </button>
             </div>
           </ClockRing>
