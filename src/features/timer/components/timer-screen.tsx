@@ -17,8 +17,8 @@ import { TimerArt } from "./timer-art";
 /**
  * The home page: the phase's colour over the whole page, the countdown in its
  * ring with start, pause and reset under the time and the skill under the
- * ring on the left, and a slot for an illustration on the right. Space, S and
- * R work as everywhere.
+ * ring on the left, and an illustration (Pomo until there is one) on the
+ * right. Space, S and R work as everywhere.
  */
 export function TimerScreen() {
   const timer = useTimer();
@@ -44,6 +44,9 @@ export function TimerScreen() {
 
   const colors = PHASE_COLOR[state.phase];
   const running = state.status === "running";
+  // Pomo works through a running focus block and rests through the breaks.
+  const mood =
+    state.phase !== "focus" ? "resting" : running ? "focused" : "happy";
 
   return (
     <>
@@ -107,7 +110,7 @@ export function TimerScreen() {
             onSelect={timer.selectSkill}
           />
         </div>
-        <TimerArt />
+        <TimerArt mood={mood} />
       </section>
     </>
   );

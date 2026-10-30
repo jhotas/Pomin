@@ -154,3 +154,21 @@
     animation: bob 2.4s ease-in-out infinite;
   }
 }
+
+/* A slow breath, swelling from the feet up; still for reduced motion. */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045, 1.03);
+  }
+}
+
+@utility animate-breathe {
+  transform-origin: 50% 100%;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: breathe 4s ease-in-out infinite;
+  }
+}

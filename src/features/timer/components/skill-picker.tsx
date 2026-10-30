@@ -18,9 +18,13 @@ type SkillPickerProps = {
   onSelect: (id: string | null) => void;
 };
 
+const addClass =
+  "flex size-12 items-center justify-center rounded-full border-2 border-text bg-surface transition md:size-14";
+
 /**
  * The skill the next focus block counts toward, as a sticker pill under the
- * ring, with a round button beside it to add another skill.
+ * ring, with a round button beside it to add another skill. Both lock while
+ * a block is under way.
  */
 export function SkillPicker({ skillId, locked, onSelect }: SkillPickerProps) {
   const skills = useSkills();
@@ -48,14 +52,26 @@ export function SkillPicker({ skillId, locked, onSelect }: SkillPickerProps) {
           ))}
         </SelectContent>
       </Select>
-      <Link
-        href="/skills"
-        aria-label="Add a skill"
-        title="Add a skill"
-        className="flex size-12 items-center justify-center rounded-full border-2 border-text bg-surface shadow-sticker-sm transition hover:-translate-y-px hover:bg-cream active:translate-x-0.5 active:translate-y-0.5 active:shadow-pressed md:size-14"
-      >
-        <Plus aria-hidden size={22} strokeWidth={2.75} />
-      </Link>
+      {locked ? (
+        // A link cannot be disabled, so a locked one is a disabled button.
+        <button
+          type="button"
+          disabled
+          aria-label="Add a skill"
+          className={`${addClass} cursor-not-allowed opacity-60`}
+        >
+          <Plus aria-hidden size={22} strokeWidth={2.75} />
+        </button>
+      ) : (
+        <Link
+          href="/skills"
+          aria-label="Add a skill"
+          title="Add a skill"
+          className={`${addClass} shadow-sticker-sm hover:-translate-y-px hover:bg-cream active:translate-x-0.5 active:translate-y-0.5 active:shadow-pressed`}
+        >
+          <Plus aria-hidden size={22} strokeWidth={2.75} />
+        </Link>
+      )}
     </div>
   );
 }
