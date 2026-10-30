@@ -1,30 +1,30 @@
 import Link from "next/link";
 import { isActivePath, NAV_ITEMS } from "./nav";
 
-type NavListProps = {
-  pathname: string;
-  onNavigate?: () => void;
-};
-
-export function NavList({ pathname, onNavigate }: NavListProps) {
+/** The three sections as one pill; the current one is filled tomato. */
+export function NavList({ pathname }: { pathname: string }) {
   return (
     <nav aria-label="Main">
-      <ul className="flex flex-col gap-1.5">
+      <ul className="flex gap-1 rounded-full border-2 border-text bg-surface p-1 shadow-sticker-sm">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const active = isActivePath(href, pathname);
           return (
             <li key={href}>
               <Link
                 href={href}
-                onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-11 items-center gap-2.5 rounded-full border-2 px-3.5 font-display font-medium transition-colors md:h-10 ${
+                className={`flex h-10 items-center gap-2 rounded-full px-4 font-display font-medium transition-colors ${
                   active
-                    ? "border-text bg-primary text-primary-ink shadow-sticker-sm"
-                    : "border-transparent text-muted hover:bg-active hover:text-text"
+                    ? "bg-primary text-primary-ink"
+                    : "text-muted hover:bg-cream hover:text-text"
                 }`}
               >
-                <Icon aria-hidden size={18} strokeWidth={2} />
+                <Icon
+                  aria-hidden
+                  size={18}
+                  strokeWidth={2}
+                  className="max-sm:hidden"
+                />
                 {label}
               </Link>
             </li>

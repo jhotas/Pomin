@@ -1,34 +1,37 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Logo } from "./logo";
-import { MobileNav } from "./mobile-nav";
-import { SidebarNav } from "./sidebar-nav";
+import { MainNav } from "./main-nav";
 import { StorageScope } from "./storage-scope";
 
 /**
- * A cream 240px sidebar with an ink edge beside a white canvas. Below 768px
- * the sidebar folds into a top bar with a full-screen menu sheet.
+ * A top bar with the logo, the pill navigation in the middle and where the
+ * data lives, above a centred canvas. Below 768px the pill takes its own row.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-dvh md:flex">
+    <div className="min-h-dvh">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded-full focus:bg-sun focus:px-3 focus:py-2"
       >
         Skip to content
       </a>
-      <MobileNav />
-      <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r-2 border-text bg-cream px-4 py-6 md:flex">
-        <Link href="/" className="mb-8 px-2.5">
+      <header className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto] items-center gap-x-4 gap-y-3 px-4 pt-5 md:grid-cols-[1fr_auto_1fr] md:px-8">
+        <Link href="/" className="justify-self-start">
           <Logo />
         </Link>
-        <SidebarNav />
-        <div className="mt-auto">
+        <div className="col-span-2 justify-self-center md:col-span-1 md:col-start-2 md:row-start-1">
+          <MainNav />
+        </div>
+        <div className="hidden justify-self-end md:block">
           <StorageScope />
         </div>
-      </aside>
-      <main id="main" className="min-w-0 flex-1 px-4 py-6 md:px-8 md:py-9">
+      </header>
+      <main
+        id="main"
+        className="mx-auto w-full max-w-7xl px-4 pt-6 pb-12 md:px-8 md:pt-8"
+      >
         {children}
       </main>
     </div>

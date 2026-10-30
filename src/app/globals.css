@@ -84,6 +84,9 @@
   /* The countdown is an instrument read from across the desk, not a KPI. */
   --text-clock: clamp(4.5rem, 13vw, 9rem);
   --text-clock--line-height: 1;
+  /* The countdown inside the ring scales with the ring. */
+  --text-ring: clamp(3.25rem, 9vw, 6.5rem);
+  --text-ring--line-height: 1;
 
   --radius-card: 20px;
   --radius-control: 12px;

@@ -6,9 +6,9 @@ export const PHASE_LABEL: Record<Phase, string> = {
   longBreak: "Long break",
 };
 
-/** Each phase owns a colour: the timer card's field and its progress fill. */
-export const PHASE_COLOR: Record<Phase, { field: string; fill: string }> = {
-  focus: { field: "bg-tint", fill: "bg-primary" },
-  shortBreak: { field: "bg-sky-soft", fill: "bg-sky" },
-  longBreak: { field: "bg-leaf-soft", fill: "bg-leaf" },
+/** Each phase owns a colour: the timer's field and its ring's progress. */
+export const PHASE_COLOR: Record<Phase, { field: string; stroke: string }> = {
+  focus: { field: "bg-tint", stroke: "var(--primary)" },
+  shortBreak: { field: "bg-sky-soft", stroke: "var(--sky)" },
+  longBreak: { field: "bg-leaf-soft", stroke: "var(--leaf)" },
 };

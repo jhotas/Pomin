@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { NavList } from "./nav-list";
 
-function CurrentNavList({ onNavigate }: { onNavigate?: () => void }) {
-  return <NavList pathname={usePathname()} onNavigate={onNavigate} />;
+function CurrentNavList() {
+  return <NavList pathname={usePathname()} />;
 }
 
 /**
@@ -13,10 +13,10 @@ function CurrentNavList({ onNavigate }: { onNavigate?: () => void }) {
  * request data, so it sits in Suspense; the static shell shows the same links
  * without a mark.
  */
-export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+export function MainNav() {
   return (
-    <Suspense fallback={<NavList pathname="" onNavigate={onNavigate} />}>
-      <CurrentNavList onNavigate={onNavigate} />
+    <Suspense fallback={<NavList pathname="" />}>
+      <CurrentNavList />
     </Suspense>
   );
 }

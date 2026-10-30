@@ -10,12 +10,11 @@ import { AddSkillForm } from "@/features/skills/add-skill-form";
 import { dayRange, formatClock, formatDuration } from "@/lib/time";
 import { useDocumentTitle } from "@/lib/use-document-title";
 import { buttonClass } from "@/ui/button";
-import { PageHeader } from "@/ui/page-header";
-import { Pomo, type PomoMood } from "@/ui/pomo";
-import type { Phase, TimerStatus } from "../core/timer";
 import { PHASE_COLOR, PHASE_LABEL } from "../phase";
 import { useTimer } from "../use-timer";
 import { useTimerShortcuts } from "../use-timer-shortcuts";
+import { ClockRing } from "./clock-ring";
+import { TimerArt } from "./timer-art";
 
 export function TimerScreen() {
   const timer = useTimer();
@@ -53,82 +52,66 @@ export function TimerScreen() {
     ? "Name the skill you are practising to start your first block."
     : skill
       ? todaySessions.length === 0
-        ? `${skill.name} · nothing logged today yet.`
-        : `${skill.name} · ${todaySessions.length} ${
+        ? "Nothing logged today yet."
+        : `${todaySessions.length} ${
             todaySessions.length === 1 ? "session" : "sessions"
           } today, ${formatDuration(totalFocusedSeconds(todaySessions))} focused.`
       : undefined;
 
-  const mood: PomoMood =
-    state.phase !== "focus"
-      ? "resting"
-      : state.status === "running"
-        ? "focused"
-        : "happy";
   const colors = PHASE_COLOR[state.phase];
 
   return (
     <>
-      <PageHeader title="Timer" description={finding} />
-      <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
-        <div className="grid gap-5 lg:col-span-2">
-          <section
-            aria-label="Timer"
-            className={`card p-5 md:p-7 ${colors.field}`}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p
-                aria-live="polite"
-                className="rounded-full border-2 border-text bg-surface px-4 py-1 font-display text-section font-semibold"
-              >
-                {phaseLabel}
-              </p>
-              {state.phase === "focus" && (
-                <p className="font-display font-medium num">
-                  Block{" "}
-                  {(state.completedFocusCount % settings.longBreakEvery) + 1} of{" "}
-                  {settings.longBreakEvery}
-                </p>
-              )}
-            </div>
+      <h1 className="sr-only">Timer</h1>
+      <section
+        aria-label="Timer"
+        className={`grid items-center gap-8 card px-5 py-8 md:min-h-[calc(100dvh-10rem)] md:grid-cols-2 md:px-10 ${colors.field}`}
+      >
+        <div className="flex flex-col items-center gap-6">
+          <ClockRing
+            clock={clock}
+            share={elapsedShare}
+            stroke={colors.stroke}
+            label={phaseLabel}
+            detail={
+              state.phase === "focus"
+                ? `Block ${(state.completedFocusCount % settings.longBreakEvery) + 1} of ${settings.longBreakEvery}`
+                : null
+            }
+          />
 
-            <div className="mt-4 flex items-center justify-between gap-4">
-              <div
-                role="timer"
-                aria-label="Time left"
-                className="font-display text-clock font-semibold num"
-              >
-                {clock}
-              </div>
-              <div className="flex shrink-0 flex-col items-center">
-                <p className="relative mb-3 hidden max-w-52 rounded-2xl border-2 border-text bg-surface px-3 py-2 text-center text-small font-semibold sm:block">
-                  {pomoLine(state.phase, state.status, firstRun)}
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-[9px] left-1/2 size-4 -translate-x-1/2 rotate-45 border-r-2 border-b-2 border-text bg-surface"
-                  />
-                </p>
-                <Pomo
-                  mood={mood}
-                  size={128}
-                  className="size-16 animate-bob sm:size-32"
+          <div className="flex w-full max-w-md flex-col items-center gap-4">
+            {firstRun ? (
+              <div className="w-full">
+                <AddSkillForm
+                  variant="primary"
+                  onAdded={(added) => timer.selectSkill(added.id)}
                 />
               </div>
-            </div>
+            ) : (
+              <div className="w-full">
+                <label htmlFor={pickerId} className="sr-only">
+                  Skill
+                </label>
+                <select
+                  id={pickerId}
+                  value={skillId ?? ""}
+                  disabled={underWay || skills.status !== "success"}
+                  onChange={(event) =>
+                    timer.selectSkill(event.target.value || null)
+                  }
+                  className="field w-full rounded-full text-center font-display text-section font-medium disabled:opacity-60"
+                >
+                  {skillList.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-            <div
-              aria-hidden
-              className="mt-6 h-5 overflow-hidden rounded-full border-2 border-text bg-surface"
-            >
-              <div
-                className={`h-full border-r-2 border-text ${colors.fill} ${
-                  elapsedShare <= 0 ? "border-r-0" : ""
-                }`}
-                style={{ width: `${Math.min(1, elapsedShare) * 100}%` }}
-              />
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={timer.toggle}
@@ -157,59 +140,39 @@ export function TimerScreen() {
               >
                 Reset
               </button>
-              <p className="ml-auto hidden text-small text-muted md:block">
-                <Key>Space</Key> start or pause · <Key>S</Key> skip ·{" "}
-                <Key>R</Key> reset
-              </p>
             </div>
-          </section>
-
-          <section
-            aria-label="Skill and today"
-            className="card bg-surface p-5 md:p-7"
-          >
-            {firstRun ? (
-              <AddSkillForm
-                variant="primary"
-                onAdded={(added) => timer.selectSkill(added.id)}
-              />
-            ) : (
-              <>
-                <div className="flex flex-wrap items-end gap-3">
-                  <div className="min-w-0 flex-1">
-                    <label
-                      htmlFor={pickerId}
-                      className="block font-display text-section font-semibold"
-                    >
-                      Skill
-                    </label>
-                    <select
-                      id={pickerId}
-                      value={skillId ?? ""}
-                      disabled={underWay || skills.status !== "success"}
-                      onChange={(event) =>
-                        timer.selectSkill(event.target.value || null)
-                      }
-                      className="mt-2 field w-full disabled:opacity-60"
-                    >
-                      {skillList.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <Link href="/skills" className={buttonClass("secondary")}>
-                    Manage skills
-                  </Link>
-                </div>
-                <div className="mt-6 border-t-2 border-dashed border-rule pt-5">
-                  <TodaySessions sessions={todaySessions} />
-                </div>
-              </>
-            )}
-          </section>
+            <p className="hidden text-small text-muted md:block">
+              <Key>Space</Key> start or pause · <Key>S</Key> skip · <Key>R</Key>{" "}
+              reset
+            </p>
+          </div>
         </div>
+
+        <TimerArt />
+      </section>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-3 lg:items-start">
+        <section
+          aria-labelledby="today-skill-title"
+          className="card bg-surface p-5 md:p-7 lg:col-span-2"
+        >
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h2 id="today-skill-title" className="text-section font-semibold">
+                {skill?.name ?? "Your skills"}
+              </h2>
+              {finding && <p className="mt-1 text-muted">{finding}</p>}
+            </div>
+            <Link href="/skills" className={buttonClass("secondary")}>
+              Manage skills
+            </Link>
+          </div>
+          {!firstRun && (
+            <div className="mt-5 border-t-2 border-dashed border-rule pt-5">
+              <TodaySessions sessions={todaySessions} />
+            </div>
+          )}
+        </section>
 
         <SkillProgressPanel skill={skill} sessions={allSessions.data ?? []} />
       </div>
@@ -223,14 +186,4 @@ function Key({ children }: { children: string }) {
       {children}
     </kbd>
   );
-}
-
-/** What Pomo says; the same facts the screen states, in Pomo's voice. */
-function pomoLine(phase: Phase, status: TimerStatus, firstRun: boolean) {
-  if (firstRun) return "Hi! I'm Pomo. What are we practising?";
-  if (phase === "longBreak") return "Big break! You earned it.";
-  if (phase === "shortBreak") return "Stretch and sip some water.";
-  if (status === "running") return "Heads down. I'll keep time.";
-  if (status === "paused") return "Take a breath, then back in.";
-  return "Ready when you are!";
 }
