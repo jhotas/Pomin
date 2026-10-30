@@ -1,6 +1,9 @@
 import { ChangeNotifier } from "../notifier";
 import {
+  DEFAULT_SKILL_NAME,
+  DefaultSkillError,
   DuplicateSkillNameError,
+  isDefaultSkill,
   RecordNotFoundError,
   type Repositories,
   type SessionRepository,
@@ -125,6 +128,12 @@ function createSkillRepository({
           patch.name === undefined
             ? current.name
             : SkillNameSchema.parse(patch.name);
+        if (
+          isDefaultSkill(current) &&
+          (name !== current.name || Boolean(patch.archivedAt))
+        ) {
+          throw new DefaultSkillError();
+        }
         if (name !== current.name) await assertNameFree(name, id);
         const updated = SkillSchema.parse({
           ...current,
@@ -142,6 +151,7 @@ function createSkillRepository({
     async remove(id) {
       await db.transaction("rw", db.skills, db.sessions, async () => {
         const current = await liveSkill(id);
+        if (isDefaultSkill(current)) throw new DefaultSkillError();
         const at = now();
         await db.skills.put({ ...current, deletedAt: at, updatedAt: at });
         await db.sessions
@@ -151,6 +161,35 @@ function createSkillRepository({
           .modify({ deletedAt: at, updatedAt: at });
       });
       notifier.notify();
+    },
+
+    async ensureDefault() {
+      // One transaction, so two callers at once cannot both create it.
+      const result = await db.transaction("rw", db.skills, async () => {
+        const row = await db.skills
+          .filter((candidate) => isLive(candidate) && isDefaultSkill(candidate))
+          .first();
+        if (row && row.archivedAt === null) {
+          return { skill: SkillSchema.parse(row) };
+        }
+        const at = now();
+        const skill = SkillSchema.parse(
+          row
+            ? { ...row, archivedAt: null, updatedAt: at }
+            : {
+                id: newId(),
+                name: DEFAULT_SKILL_NAME,
+                archivedAt: null,
+                createdAt: at,
+                updatedAt: at,
+                deletedAt: null,
+              },
+        );
+        await db.skills.put(skill);
+        return { skill, changed: true };
+      });
+      if (result.changed) notifier.notify();
+      return result.skill;
     },
 
     subscribe: (listener) => notifier.subscribe(listener),

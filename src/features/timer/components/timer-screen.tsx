@@ -3,6 +3,7 @@
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect } from "react";
 import { useSkills } from "@/data/hooks";
+import { isDefaultSkill } from "@/data/repositories";
 import { formatClock } from "@/lib/time";
 import { useDocumentTitle } from "@/lib/use-document-title";
 import { iconButtonClass } from "@/ui/button";
@@ -15,21 +16,22 @@ import { TimerArt } from "./timer-art";
 
 /**
  * The home page: the phase's colour over the whole page, the countdown in its
- * ring with the skill above the time and start, pause and reset under it on
- * the left, and a slot for an illustration on the right. Space, S and R work
- * as everywhere.
+ * ring with start, pause and reset under the time and the skill under the
+ * ring on the left, and a slot for an illustration on the right. Space, S and
+ * R work as everywhere.
  */
 export function TimerScreen() {
   const timer = useTimer();
   const { state, skillId } = timer;
   const skills = useSkills();
 
-  // Keep a valid skill selected while the timer is idle.
+  // Keep a valid skill selected while the timer is idle, the default first.
   const { selectSkill } = timer;
   useEffect(() => {
     if (skills.status !== "success" || state.status !== "idle") return;
     if (skills.data.some((candidate) => candidate.id === skillId)) return;
-    selectSkill(skills.data[0]?.id ?? null);
+    const fallback = skills.data.find(isDefaultSkill) ?? skills.data[0];
+    selectSkill(fallback?.id ?? null);
   }, [skills, skillId, state.status, selectSkill]);
 
   useTimerShortcuts(timer);
@@ -52,19 +54,12 @@ export function TimerScreen() {
         aria-label="Timer"
         className="grid items-center gap-8 py-4 md:min-h-[calc(100dvh-9rem)] md:grid-cols-2"
       >
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-6 md:gap-8">
           <ClockRing
             clock={clock}
             share={1 - timer.remainingMs / state.plannedMs}
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
-            above={
-              <SkillPicker
-                skillId={skillId}
-                locked={!timer.ready || state.status !== "idle"}
-                onSelect={timer.selectSkill}
-              />
-            }
           >
             <div className="flex items-center gap-3">
               <button
@@ -106,6 +101,11 @@ export function TimerScreen() {
               </button>
             </div>
           </ClockRing>
+          <SkillPicker
+            skillId={skillId}
+            locked={!timer.ready || state.status !== "idle"}
+            onSelect={timer.selectSkill}
+          />
         </div>
         <TimerArt />
       </section>

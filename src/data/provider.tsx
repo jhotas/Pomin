@@ -43,8 +43,18 @@ function createLocalAppData(): AppData | null {
   const settings = createSettingsStore(storage);
   const timer = createTimerStore(storage, settings.get);
   const supabase = createBrowserSupabase();
+  const repositories = createDexieRepositories(db, { notifier });
+  // Every browser has the default skill, also right after a sign-out clears
+  // the data. Signing in merges it into the account's own by name.
+  const keepDefaultSkill = () => {
+    repositories.skills.ensureDefault().catch((error: unknown) => {
+      console.error("Could not create the default skill", error);
+    });
+  };
+  keepDefaultSkill();
+  notifier.subscribe(keepDefaultSkill);
   return {
-    ...createDexieRepositories(db, { notifier }),
+    ...repositories,
     settings,
     timer,
     account: supabase

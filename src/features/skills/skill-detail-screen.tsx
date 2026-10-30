@@ -6,7 +6,11 @@ import { useId, useState, type FormEvent } from "react";
 import { ZodError } from "zod";
 import { useSkill, useSkillSessions } from "@/data/hooks";
 import { useAppData } from "@/data/provider";
-import { DuplicateSkillNameError } from "@/data/repositories";
+import {
+  DEFAULT_SKILL_NAME,
+  DuplicateSkillNameError,
+  isDefaultSkill,
+} from "@/data/repositories";
 import type { Session, Skill } from "@/data/schemas";
 import { MasteryGrid } from "@/features/progress/mastery-grid";
 import {
@@ -264,6 +268,21 @@ function ManageSkill({
   async function remove() {
     await data?.skills.remove(skill.id);
     router.replace("/skills");
+  }
+
+  if (isDefaultSkill(skill)) {
+    return (
+      <section aria-labelledby="manage-title" className="card bg-surface p-5">
+        <h2 id="manage-title" className="text-section font-semibold">
+          Default skill
+        </h2>
+        <p className="mt-2 text-muted">
+          Focus time with no other skill counts toward {DEFAULT_SKILL_NAME}.
+          It stays in the timer&apos;s list, so it cannot be renamed, archived
+          or deleted.
+        </p>
+      </section>
+    );
   }
 
   return (

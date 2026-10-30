@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { useSettings } from "@/data/hooks";
 import { useAppData, type AppData } from "@/data/provider";
+import { RecordNotFoundError } from "@/data/repositories";
+import type { NewSession } from "@/data/schemas";
 import {
   DEFAULT_TIMER_SETTINGS,
   initialTimerState,
@@ -30,27 +32,44 @@ function browserNow(): number {
   return typeof window === "undefined" ? 0 : Date.now();
 }
 
+/**
+ * Records a block under its skill. A block with no skill, or whose skill was
+ * deleted mid-block, counts toward the default skill.
+ */
+async function recordSession(
+  data: AppData,
+  session: Omit<NewSession, "skillId">,
+  skillId: string | null,
+) {
+  if (skillId) {
+    try {
+      await data.sessions.add({ ...session, skillId });
+      return;
+    } catch (error) {
+      if (!(error instanceof RecordNotFoundError)) throw error;
+    }
+  }
+  const fallback = await data.skills.ensureDefault();
+  await data.sessions.add({ ...session, skillId: fallback.id });
+}
+
 function recordSessions(
   data: AppData,
   events: TimerEvent[],
   skillId: string | null,
 ) {
-  if (!skillId) return;
   for (const event of events) {
     if (event.type !== "focusEnded") continue;
-    data.sessions
-      .add({
-        skillId,
-        startedAt: new Date(event.startedAt).toISOString(),
-        endedAt: new Date(event.endedAt).toISOString(),
-        focusedSeconds: Math.round(event.focusedMs / 1000),
-        plannedSeconds: Math.round(event.plannedMs / 1000),
-        outcome: event.outcome,
-      })
-      .catch((error: unknown) => {
-        // The skill was deleted mid-block; there is nothing to attach it to.
-        console.error("Could not record the session", error);
-      });
+    const session = {
+      startedAt: new Date(event.startedAt).toISOString(),
+      endedAt: new Date(event.endedAt).toISOString(),
+      focusedSeconds: Math.round(event.focusedMs / 1000),
+      plannedSeconds: Math.round(event.plannedMs / 1000),
+      outcome: event.outcome,
+    };
+    recordSession(data, session, skillId).catch((error: unknown) => {
+      console.error("Could not record the session", error);
+    });
   }
 }
 
@@ -100,7 +119,8 @@ export function useTimer() {
 
   const { state, skillId } = snapshot;
 
-  // A focus block runs without a skill too; it is then not recorded.
+  // A focus block runs without a skill too; it then counts toward the
+  // default skill.
   const toggle = useCallback(() => {
     const status = data?.timer.get().state.status;
     if (status === "running") dispatch("pause");
