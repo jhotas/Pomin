@@ -163,7 +163,7 @@ The document title shows the remaining time while running, for example `18:42 ·
 Art direction is decided in part 2 with the `design-taste-frontend` skill, using its app-screen mode and browser inspector. Fixed constraints:
 
 - Typography and spacing carry the hierarchy. No gradients, glass effects, drop shadows at rest, emoji or decorative icons.
-- One restrained accent color. Light and dark themes from the same tokens.
+- One restrained accent color. One light theme, whatever the system setting (the user chose it over a dark theme).
 - The countdown is the visual focus of the timer screen.
 - All design values live as tokens in Tailwind's theme. Components never use raw hex values.
 - WCAG 2.2 AA contrast, visible focus states, full keyboard use, and `prefers-reduced-motion` respected.

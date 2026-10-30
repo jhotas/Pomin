@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. A warm ledger: cream paper, warm ink, and one pastel red.
+ * Design tokens. A warm ledger on a white page: cream cards, warm ink, and
+ * one pastel red. The app has one light theme, whatever the system setting.
  * --primary fills the main action; --data (a deeper shade of the same red, so
- * it holds 3:1 against the cream) marks the live or current data element;
+ * it holds 3:1 against the cards) marks the live or current data element;
  * --tint is the soft red of a selected place, such as the current page.
  * --negative is a darker brick, so a destructive action never reads as the
  * accent. Components use these tokens through Tailwind classes (bg-surface,
@@ -11,8 +12,8 @@
  */
 :root {
   color-scheme: light;
-  --ground: #f5ede0;
-  --surface: #fffaf3;
+  --ground: #ffffff;
+  --surface: #fcf7f0;
   --raised: #efe5d6;
   --active: #e8dccb;
   --border: #e8dccb;
@@ -26,27 +27,6 @@
   --data: #cc5a50;
   --positive: #3d7a4c;
   --negative: #a3312a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --ground: #1b1613;
-    --surface: #241e1a;
-    --raised: #2e2722;
-    --active: #362e28;
-    --border: #3a312a;
-    --rule: #2b241f;
-    --control: #5a4d43;
-    --tint: #43292a;
-    --text: #f5ece0;
-    --muted: #bdae9f;
-    --primary: #ef968c;
-    --primary-ink: #1b1613;
-    --data: #ef968c;
-    --positive: #7cc48f;
-    --negative: #ff8f7f;
-  }
 }
 
 @theme {
