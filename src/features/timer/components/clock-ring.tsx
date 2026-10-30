@@ -4,27 +4,40 @@ type ClockRingProps = {
   share: number;
   /** The phase's colour, as a CSS value. */
   stroke: string;
-  label: string;
-  detail: string | null;
+  /** The phase and its state, for screen readers. */
+  status: string;
+  /** What pressing the ring does, for screen readers, e.g. "Start focus". */
+  action: string;
+  onToggle: () => void;
+  disabled: boolean;
 };
 
 const RADIUS = 88;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /**
- * The countdown inside a thick ring. The ring fills in the phase's colour as
- * the phase runs; the time and the phase are the text in its middle.
+ * The countdown inside a thick ring that fills in the phase's colour as the
+ * phase runs. The ring is the timer's button: pressing it starts or pauses.
+ * Only the time is shown; the phase is announced to screen readers.
  */
 export function ClockRing({
   clock,
   share,
   stroke,
-  label,
-  detail,
+  status,
+  action,
+  onToggle,
+  disabled,
 }: ClockRingProps) {
   const filled = Math.min(1, Math.max(0, share)) * CIRCUMFERENCE;
   return (
-    <div className="relative aspect-square w-full max-w-[min(30rem,80vw)]">
+    <button
+      type="button"
+      onClick={onToggle}
+      disabled={disabled}
+      aria-label={action}
+      className="relative aspect-square w-full max-w-[min(30rem,80vw)] rounded-full transition-transform enabled:cursor-pointer enabled:active:scale-[0.99] disabled:cursor-default"
+    >
       <svg
         aria-hidden
         viewBox="0 0 200 200"
@@ -55,24 +68,18 @@ export function ClockRing({
           strokeDasharray={`${filled} ${CIRCUMFERENCE}`}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center">
-        <p
-          aria-live="polite"
-          className="rounded-full border-2 border-text bg-surface px-4 py-1 font-display text-section font-semibold"
-        >
-          {label}
-        </p>
-        <div
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span
           role="timer"
           aria-label="Time left"
           className="font-display text-ring font-semibold num"
         >
           {clock}
-        </div>
-        {detail && (
-          <p className="font-display font-medium text-muted num">{detail}</p>
-        )}
-      </div>
-    </div>
+        </span>
+      </span>
+      <span aria-live="polite" className="sr-only">
+        {status}
+      </span>
+    </button>
   );
 }
