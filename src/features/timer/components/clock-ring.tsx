@@ -4,7 +4,7 @@ type ClockRingProps = {
   clock: string;
   /** How much of the phase has passed, 0 to 1. */
   share: number;
-  /** The phase's colour, as a CSS value. */
+  /** The progress colour, as a CSS value. */
   stroke: string;
   /** The phase and its state, for screen readers. */
   status: string;
@@ -16,9 +16,9 @@ const RADIUS = 88;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /**
- * The countdown inside a thick ring that fills in the phase's colour as the
- * phase runs, with the controls under the time. Only the time is shown; the
- * phase is announced to screen readers.
+ * The countdown on a white face inside a thick cream ring that fills in ink
+ * as the phase runs, with the controls under the time. Only the time is
+ * shown; the phase is announced to screen readers.
  */
 export function ClockRing({
   clock,
@@ -36,6 +36,8 @@ export function ClockRing({
         className="absolute inset-0 size-full -rotate-90"
         fill="none"
       >
+        {/* A white face, so the time reads ink on white in every phase. */}
+        <circle cx="100" cy="100" r="80" fill="var(--surface)" />
         {/* An ink outline on both edges of the track. */}
         <circle
           cx="100"
@@ -48,7 +50,7 @@ export function ClockRing({
           cx="100"
           cy="100"
           r={RADIUS}
-          stroke="var(--surface)"
+          stroke="var(--cream)"
           strokeWidth="14"
         />
         <circle

@@ -18,7 +18,7 @@ const variants: Record<ButtonVariant, string> = {
 
 /** A round sticker button that holds one icon. */
 export function iconButtonClass(variant: "primary" | "secondary"): string {
-  return `flex size-11 items-center justify-center rounded-full border-2 border-text shadow-sticker-sm md:size-14 transition hover:-translate-y-px active:translate-x-0.5 active:translate-y-0.5 active:shadow-pressed disabled:translate-0 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none ${
+  return `flex size-11 items-center justify-center rounded-full border-2 border-text shadow-sticker-sm md:size-14 transition hover:-translate-y-px active:translate-x-0.5 active:translate-y-0.5 active:shadow-pressed disabled:translate-0 disabled:cursor-not-allowed disabled:border-muted disabled:bg-cream disabled:text-muted disabled:shadow-none ${
     variant === "primary"
       ? "bg-primary text-primary-ink"
       : "bg-surface text-text hover:bg-cream"
