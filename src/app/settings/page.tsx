@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AccountSection } from "@/features/account/account-section";
+import { TimerSettings } from "@/features/timer/components/timer-settings";
 import { PageHeader } from "@/ui/page-header";
 import { SettingsSection } from "@/ui/settings-section";
 
@@ -10,6 +11,12 @@ export default function SettingsPage() {
     <>
       <PageHeader title="Settings" />
       <div>
+        <SettingsSection
+          title="Timer"
+          description="How long each phase lasts, saved as you change it. A phase already under way keeps its length."
+        >
+          <TimerSettings />
+        </SettingsSection>
         <AccountSection />
         <SettingsSection
           title="Data"

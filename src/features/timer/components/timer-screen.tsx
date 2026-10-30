@@ -15,7 +15,7 @@ import { SkillPicker } from "./skill-picker";
 import { TimerArt } from "./timer-art";
 
 /**
- * The home page: the phase's colour over the whole page, the countdown in its
+ * The home page, over the phase's colour from the shell: the countdown in its
  * ring with start, pause and reset under the time and the skill under the
  * ring on the left, and an illustration (Pomo until there is one) on the
  * right. Space, S and R work as everywhere.
@@ -51,8 +51,6 @@ export function TimerScreen() {
   return (
     <>
       <h1 className="sr-only">Timer</h1>
-      {/* The phase's colour fills the whole page, behind the menu too. */}
-      <div aria-hidden className={`fixed inset-0 -z-10 ${colors.field}`} />
       <section
         aria-label="Timer"
         className="grid items-center gap-8 py-4 md:min-h-[calc(100dvh-9rem)] md:grid-cols-2"

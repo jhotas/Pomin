@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
+import { PhaseBackdrop } from "@/features/timer/components/phase-backdrop";
 import { HeaderExtras } from "./header-extras";
 import { MainNav } from "./main-nav";
 
 /**
- * A top bar with the pill navigation in the middle, the logo on its left and
+ * The timer's phase colour behind every page, and a top bar with the pill
+ * navigation in the middle, the logo on its left and
  * where the data lives on its right (both left out on the home page), above a
  * centred canvas. Below 768px the pill takes its own row. With a mouse the
  * pill hides above the top edge until the pointer nears it.
@@ -11,6 +13,7 @@ import { MainNav } from "./main-nav";
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-dvh">
+      <PhaseBackdrop />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded-full focus:bg-sun focus:px-3 focus:py-2"

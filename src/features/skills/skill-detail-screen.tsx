@@ -277,9 +277,9 @@ function ManageSkill({
           Default skill
         </h2>
         <p className="mt-2 text-muted">
-          Focus time with no other skill counts toward {DEFAULT_SKILL_NAME}.
-          It stays in the timer&apos;s list, so it cannot be renamed, archived
-          or deleted.
+          Focus time with no other skill counts toward {DEFAULT_SKILL_NAME}. It
+          stays in the timer&apos;s list, so it cannot be renamed, archived or
+          deleted.
         </p>
       </section>
     );

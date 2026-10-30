@@ -52,7 +52,10 @@ export const SessionSchema = z
   .refine(endsAfterStart, endsAfterStartError);
 export type Session = z.infer<typeof SessionSchema>;
 
-const Minutes = z.number().int().min(1).max(180);
+/** How long a phase can last, in minutes. */
+export const MINUTES_RANGE = { min: 1, max: 180 } as const;
+
+const Minutes = z.number().int().min(MINUTES_RANGE.min).max(MINUTES_RANGE.max);
 
 export const SettingsSchema = z.object({
   focusMinutes: Minutes.default(DEFAULT_TIMER_SETTINGS.focusMinutes),
