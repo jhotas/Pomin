@@ -20,7 +20,7 @@ export function NavList({ pathname, onNavigate }: NavListProps) {
                 aria-current={active ? "page" : undefined}
                 className={`flex h-11 items-center gap-2.5 rounded-control px-2.5 transition-colors md:h-8 ${
                   active
-                    ? "bg-active text-text"
+                    ? "bg-tint text-text"
                     : "text-muted hover:bg-raised hover:text-text"
                 }`}
               >

@@ -1,46 +1,51 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Art direction: design-taste-frontend, app style
- * "achromatic-ledger". The chrome carries no hue; --data is the one hue and
- * marks only the live or current data element. Components use these tokens
- * through Tailwind classes (bg-surface, text-muted, ...), never raw values.
+ * Design tokens. A warm ledger: cream paper, warm ink, and one pastel red.
+ * --primary fills the main action; --data (a deeper shade of the same red, so
+ * it holds 3:1 against the cream) marks the live or current data element;
+ * --tint is the soft red of a selected place, such as the current page.
+ * --negative is a darker brick, so a destructive action never reads as the
+ * accent. Components use these tokens through Tailwind classes (bg-surface,
+ * text-muted, ...), never raw values.
  */
 :root {
   color-scheme: light;
-  --ground: #f2f4f7;
-  --surface: #ffffff;
-  --raised: #eceef1;
-  --active: #e6e8eb;
-  --border: #e3e5e8;
-  --rule: #eef0f2;
-  --control: #d4d6d9;
-  --text: #0a0a0a;
-  --muted: #5f6368;
-  --primary: #141414;
-  --primary-ink: #ffffff;
-  --data: #1d5fbf;
-  --positive: #247b50;
-  --negative: #c4242a;
+  --ground: #f5ede0;
+  --surface: #fffaf3;
+  --raised: #efe5d6;
+  --active: #e8dccb;
+  --border: #e8dccb;
+  --rule: #f0e7da;
+  --control: #c9b8a2;
+  --tint: #f6d9d3;
+  --text: #2a211d;
+  --muted: #6b5d53;
+  --primary: #ec8b80;
+  --primary-ink: #2a211d;
+  --data: #cc5a50;
+  --positive: #3d7a4c;
+  --negative: #a3312a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --ground: #000000;
-    --surface: #111111;
-    --raised: #1c1c1c;
-    --active: #222222;
-    --border: #262626;
-    --rule: #1a1a1a;
-    --control: #444444;
-    --text: #ffffff;
-    --muted: #b4b4b4;
-    --primary: #ffffff;
-    --primary-ink: #000000;
-    --data: #6b9be6;
-    --positive: #3fc07a;
-    --negative: #e5566f;
+    --ground: #1b1613;
+    --surface: #241e1a;
+    --raised: #2e2722;
+    --active: #362e28;
+    --border: #3a312a;
+    --rule: #2b241f;
+    --control: #5a4d43;
+    --tint: #43292a;
+    --text: #f5ece0;
+    --muted: #bdae9f;
+    --primary: #ef968c;
+    --primary-ink: #1b1613;
+    --data: #ef968c;
+    --positive: #7cc48f;
+    --negative: #ff8f7f;
   }
 }
 
@@ -59,6 +64,7 @@
   --color-border: var(--border);
   --color-rule: var(--rule);
   --color-control: var(--control);
+  --color-tint: var(--tint);
   --color-text: var(--text);
   --color-muted: var(--muted);
   --color-primary: var(--primary);
