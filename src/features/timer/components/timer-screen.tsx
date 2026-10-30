@@ -10,12 +10,14 @@ import { PHASE_COLOR, PHASE_LABEL } from "../phase";
 import { useTimer } from "../use-timer";
 import { useTimerShortcuts } from "../use-timer-shortcuts";
 import { ClockRing } from "./clock-ring";
+import { SkillPicker } from "./skill-picker";
 import { TimerArt } from "./timer-art";
 
 /**
  * The home page: the phase's colour over the whole page, the countdown in its
- * ring with start, pause and reset under the time on the left, and a slot for
- * an illustration on the right. Space, S and R work as everywhere.
+ * ring with the skill above the time and start, pause and reset under it on
+ * the left, and a slot for an illustration on the right. Space, S and R work
+ * as everywhere.
  */
 export function TimerScreen() {
   const timer = useTimer();
@@ -56,12 +58,19 @@ export function TimerScreen() {
             share={1 - timer.remainingMs / state.plannedMs}
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
+            above={
+              <SkillPicker
+                skillId={skillId}
+                locked={!timer.ready || state.status !== "idle"}
+                onSelect={timer.selectSkill}
+              />
+            }
           >
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={timer.toggle}
-                disabled={!timer.ready || !timer.canStart || running}
+                disabled={!timer.ready || running}
                 aria-label={state.status === "paused" ? "Resume" : "Start"}
                 className={iconButtonClass("primary")}
               >

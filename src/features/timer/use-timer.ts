@@ -99,14 +99,14 @@ export function useTimer() {
   }, [store, running, dispatch]);
 
   const { state, skillId } = snapshot;
-  const canStart = state.phase !== "focus" || skillId !== null;
 
+  // A focus block runs without a skill too; it is then not recorded.
   const toggle = useCallback(() => {
     const status = data?.timer.get().state.status;
     if (status === "running") dispatch("pause");
     else if (status === "paused") dispatch("resume");
-    else if (canStart) dispatch("start");
-  }, [data, dispatch, canStart]);
+    else dispatch("start");
+  }, [data, dispatch]);
 
   return {
     ready: data !== null,
@@ -114,7 +114,6 @@ export function useTimer() {
     state,
     skillId,
     remainingMs: remainingMs(state, now),
-    canStart,
     toggle,
     skip: useCallback(() => dispatch("skip"), [dispatch]),
     reset: useCallback(() => dispatch("reset"), [dispatch]),
