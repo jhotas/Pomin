@@ -2,7 +2,7 @@
 
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect } from "react";
-import { useSkills } from "@/data/hooks";
+import { useSettings, useSkills } from "@/data/hooks";
 import { isDefaultSkill } from "@/data/repositories";
 import { formatClock } from "@/lib/time";
 import { useDocumentTitle } from "@/lib/use-document-title";
@@ -11,6 +11,7 @@ import { PHASE_COLOR, PHASE_LABEL } from "../phase";
 import { useTimer } from "../use-timer";
 import { useTimerShortcuts } from "../use-timer-shortcuts";
 import { ClockRing } from "./clock-ring";
+import { PomoDots } from "./pomo-dots";
 import { SkillPicker } from "./skill-picker";
 import { TimerArt } from "./timer-art";
 
@@ -24,6 +25,7 @@ export function TimerScreen() {
   const timer = useTimer();
   const { state, skillId } = timer;
   const skills = useSkills();
+  const [settings] = useSettings();
 
   // Keep a valid skill selected while the timer is idle, the default first.
   const { selectSkill } = timer;
@@ -44,6 +46,11 @@ export function TimerScreen() {
 
   const colors = PHASE_COLOR[state.phase];
   const running = state.status === "running";
+  // The round fills as focus blocks complete, and stays full through its
+  // long break.
+  const round = Math.max(1, settings.longBreakEvery);
+  const done =
+    state.phase === "longBreak" ? round : state.completedFocusCount % round;
   // Pomo works through a running focus block and rests through the breaks.
   const mood =
     state.phase !== "focus" ? "resting" : running ? "focused" : "happy";
@@ -62,6 +69,7 @@ export function TimerScreen() {
             share={1 - timer.remainingMs / state.plannedMs}
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
+            above={<PomoDots done={done} total={round} />}
           >
             <div className="flex items-center gap-3">
               <button
@@ -109,7 +117,7 @@ export function TimerScreen() {
             onSelect={timer.selectSkill}
           />
         </div>
-        <TimerArt mood={mood} />
+        <TimerArt mood={mood} breathing={running} />
       </section>
     </>
   );

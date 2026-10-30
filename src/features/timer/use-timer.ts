@@ -13,6 +13,7 @@ import {
   type TimerEvent,
 } from "./core/timer";
 import type { TimerSnapshot } from "./timer-store";
+import { playVictory, unlockAudio } from "./victory-sound";
 
 const SERVER_SNAPSHOT: TimerSnapshot = {
   state: initialTimerState(DEFAULT_TIMER_SETTINGS),
@@ -22,6 +23,20 @@ const noSubscription = () => () => {};
 
 /** How often a running timer re-renders. Correctness does not depend on it. */
 const TICK_MS = 250;
+
+/** A round that ended longer ago than this (the tab was closed) is not cheered. */
+const FRESH_MS = 10_000;
+
+/** The last focus block of a round ran out on its own, just now. */
+function roundJustEnded(events: TimerEvent[], now: number): boolean {
+  return events.some(
+    (event) =>
+      event.type === "phaseChanged" &&
+      event.from === "focus" &&
+      event.to === "longBreak" &&
+      now - event.at < FRESH_MS,
+  );
+}
 
 /**
  * The clock is read only in the browser. On the server the timer is always the
@@ -93,6 +108,13 @@ export function useTimer() {
       const events = data.timer.dispatch({ type }, at);
       setNow(at);
       recordSessions(data, events, skillId);
+      if (
+        type === "tick" &&
+        data.settings.get().soundEnabled &&
+        roundJustEnded(events, at)
+      ) {
+        playVictory();
+      }
     },
     [data],
   );
@@ -123,6 +145,8 @@ export function useTimer() {
   // default skill.
   const toggle = useCallback(() => {
     const status = data?.timer.get().state.status;
+    // Starting is a click or a key press, when browsers allow sound to begin.
+    unlockAudio();
     if (status === "running") dispatch("pause");
     else if (status === "paused") dispatch("resume");
     else dispatch("start");

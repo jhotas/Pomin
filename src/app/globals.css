@@ -24,7 +24,7 @@
   --primary: #ef5a4c;
   --primary-ink: #2b1d1f;
   --data: #ef5a4c;
-  --tint: #ffe0d9;
+  --tint: #fcc7bb;
   --sky: #7fd3ef;
   --sky-soft: #dcf3fb;
   --leaf: #3f9b5a;
@@ -155,14 +155,14 @@
   }
 }
 
-/* A slow breath, swelling from the feet up; still for reduced motion. */
+/* A slow breath: rising a little and swelling; still for reduced motion. */
 @keyframes breathe {
   0%,
   100% {
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: scale(1.045, 1.03);
+    transform: translateY(-12px) scale(1.03);
   }
 }
 

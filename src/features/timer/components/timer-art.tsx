@@ -3,12 +3,18 @@ import { Pomo, type PomoMood } from "@/ui/pomo";
 
 /**
  * The illustration beside the timer. Put the picture in `public/` and set its
- * path here, for example "/timer-art.png"; while it is null Pomo breathes in
- * its place.
+ * path here, for example "/timer-art.png"; while it is null Pomo stands in
+ * its place, breathing while the timer runs.
  */
 const TIMER_ART_SRC: string | null = null;
 
-export function TimerArt({ mood }: { mood: PomoMood }) {
+export function TimerArt({
+  mood,
+  breathing,
+}: {
+  mood: PomoMood;
+  breathing: boolean;
+}) {
   return (
     <div className="relative hidden aspect-[4/3] w-full items-center justify-center md:flex">
       {TIMER_ART_SRC ? (
@@ -24,7 +30,7 @@ export function TimerArt({ mood }: { mood: PomoMood }) {
         <Pomo
           mood={mood}
           size={320}
-          className="h-auto w-[min(20rem,70%)] animate-breathe"
+          className={`h-auto w-[min(20rem,70%)] ${breathing ? "animate-breathe" : ""}`}
         />
       )}
     </div>
