@@ -2,6 +2,14 @@
 
 pomoapp is a pomodoro timer that records focused time per skill, so you can track your progress toward 10,000 hours of deliberate practice in each one. It works fully offline with no account. An optional account adds sync across devices.
 
+## Features
+
+- A focus, short break and long break cycle with presets (25/5/15, 30/10/30, 50/10/30) or your own lengths, and dots that fill as the round's focus blocks complete.
+- Time recorded per skill. Every browser starts with a Focus skill, which also takes focus time that has no other skill.
+- 8-bit sound effects made in the browser with Web Audio: a blip per button, a chime per focus block, a fanfare per round. Optional notifications when a phase ends out of sight.
+- Keyboard shortcuts: Space starts or pauses, S skips, R resets.
+- A JSON copy of all data to save and bring back.
+
 ## Requirements
 
 - Node.js 26 (see `.nvmrc`)
