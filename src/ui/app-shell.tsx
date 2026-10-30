@@ -12,7 +12,9 @@ import { MainNav } from "./main-nav";
  */
 export function AppShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-dvh">
+    // A page marked data-fullpage (the timer) fills the window exactly and
+    // never scrolls.
+    <div className="flex min-h-dvh flex-col has-[[data-fullpage]]:h-dvh has-[[data-fullpage]]:overflow-hidden">
       <PhaseBackdrop />
       <a
         href="#main"
@@ -27,11 +29,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/*
           With a mouse, the pill tucks up behind the top edge, its rim still
           showing, and drops back when the pointer nears it or a link takes
-          focus. The padding stretches the hover zone up to the edge and
+          keyboard focus. A click's focus does not hold it down. The padding stretches the hover zone up to the edge and
           around the pill. Touch screens keep it in place.
         */}
         <div className="group col-span-2 justify-self-center md:col-span-1 md:col-start-2 md:row-start-1 [@media(hover:hover)]:-mx-10 [@media(hover:hover)]:-mt-5 [@media(hover:hover)]:-mb-4 [@media(hover:hover)]:px-10 [@media(hover:hover)]:pt-5 [@media(hover:hover)]:pb-4">
-          <div className="transition-transform delay-300 duration-300 ease-out group-focus-within:translate-y-0 group-focus-within:delay-0 group-hover:translate-y-0 group-hover:delay-0 motion-reduce:transition-none [@media(hover:hover)]:-translate-y-[calc(100%+0.75rem)]">
+          <div className="transition-transform delay-300 duration-300 ease-out group-hover:translate-y-0 group-hover:delay-0 group-has-[:focus-visible]:translate-y-0 group-has-[:focus-visible]:delay-0 motion-reduce:transition-none [@media(hover:hover)]:-translate-y-[calc(100%+0.75rem)]">
             <MainNav />
           </div>
         </div>
@@ -41,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
       <main
         id="main"
-        className="mx-auto w-full max-w-7xl px-4 pt-6 pb-12 md:px-8 md:pt-8"
+        className="mx-auto min-h-0 w-full max-w-7xl flex-1 px-4 pt-6 pb-12 md:px-8 md:pt-8"
       >
         {children}
       </main>

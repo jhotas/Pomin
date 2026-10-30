@@ -53,7 +53,8 @@ export function TimerScreen() {
       <h1 className="sr-only">Timer</h1>
       <section
         aria-label="Timer"
-        className="grid items-center gap-8 py-4 md:min-h-[calc(100dvh-9rem)] md:grid-cols-2"
+        data-fullpage
+        className="grid h-full content-center items-center gap-8 md:grid-cols-2"
       >
         <div className="flex flex-col items-center gap-6 md:gap-8">
           <ClockRing

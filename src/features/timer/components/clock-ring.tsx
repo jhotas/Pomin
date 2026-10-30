@@ -29,7 +29,7 @@ export function ClockRing({
 }: ClockRingProps) {
   const filled = Math.min(1, Math.max(0, share)) * CIRCUMFERENCE;
   return (
-    <div className="relative aspect-square w-full max-w-[min(30rem,86vw)]">
+    <div className="relative aspect-square w-full max-w-[min(30rem,86vw,calc(100dvh-17rem))]">
       <svg
         aria-hidden
         viewBox="0 0 200 200"
