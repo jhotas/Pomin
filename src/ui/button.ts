@@ -16,6 +16,15 @@ const variants: Record<ButtonVariant, string> = {
   dangerText: "text-negative underline-offset-4 hover:underline",
 };
 
+/** A round sticker button that holds one icon. */
+export function iconButtonClass(variant: "primary" | "secondary"): string {
+  return `flex size-11 items-center justify-center rounded-full border-2 border-text shadow-sticker-sm md:size-14 transition hover:-translate-y-px active:translate-x-0.5 active:translate-y-0.5 active:shadow-pressed disabled:translate-0 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none ${
+    variant === "primary"
+      ? "bg-primary text-primary-ink"
+      : "bg-surface text-text hover:bg-cream"
+  }`;
+}
+
 /** Class names for a button or a link styled as one. */
 export function buttonClass(variant: ButtonVariant = "secondary"): string {
   return `${base} ${variants[variant]}`;
