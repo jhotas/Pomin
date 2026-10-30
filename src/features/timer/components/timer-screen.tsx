@@ -12,6 +12,7 @@ import { useTimer } from "../use-timer";
 import { useTimerShortcuts } from "../use-timer-shortcuts";
 import { ClockRing } from "./clock-ring";
 import { PomoDots } from "./pomo-dots";
+import { ShortcutsHint } from "./shortcuts-hint";
 import { SkillPicker } from "./skill-picker";
 import { TimerArt } from "./timer-art";
 
@@ -19,7 +20,8 @@ import { TimerArt } from "./timer-art";
  * The home page, over the phase's colour from the shell: the countdown in its
  * ring with start, pause and reset under the time and the skill under the
  * ring on the left, and an illustration (Pomo until there is one) on the
- * right. Space, S and R work as everywhere.
+ * right. Space, S and R work as everywhere, listed in a pill that rises from
+ * the bottom edge on hover.
  */
 export function TimerScreen() {
   const timer = useTimer();
@@ -129,6 +131,7 @@ export function TimerScreen() {
         </div>
         <TimerArt mood={mood} breathing={running} />
       </section>
+      <ShortcutsHint />
     </>
   );
 }
