@@ -7,6 +7,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import { createBackupService, type BackupService } from "./backup";
 import { PomoDatabase } from "./dexie/database";
 import { createDexieRepositories } from "./dexie/repositories";
 import { ChangeNotifier } from "./notifier";
@@ -25,6 +26,7 @@ import {
 export type AppData = Repositories & {
   settings: SettingsStore;
   timer: TimerStore;
+  backup: BackupService;
   /** null when no Supabase project is configured. */
   account: AccountStore | null;
 };
@@ -57,6 +59,7 @@ function createLocalAppData(): AppData | null {
     ...repositories,
     settings,
     timer,
+    backup: createBackupService({ db, notifier, settings }),
     account: supabase
       ? createAccountStore({ supabase, db, notifier, timer, storage })
       : null,

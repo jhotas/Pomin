@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AccountSection } from "@/features/account/account-section";
+import { DataSection } from "@/features/backup/data-section";
 import {
   SoundSettings,
   TimerSettings,
@@ -27,16 +28,7 @@ export default function SettingsPage() {
           <SoundSettings />
         </SettingsSection>
         <AccountSection />
-        <SettingsSection
-          title="Data"
-          description="This browser keeps its own copy of your skills and sessions."
-        >
-          <p>
-            The app reads from this copy, so it works offline. Signed out,
-            clearing this site&apos;s data in your browser deletes it; signed
-            in, your account keeps a copy.
-          </p>
-        </SettingsSection>
+        <DataSection />
       </div>
     </>
   );
