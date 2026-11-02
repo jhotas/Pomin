@@ -155,20 +155,327 @@
   }
 }
 
-/* A slow breath: rising a little and swelling; still for reduced motion. */
-@keyframes breathe {
+/*
+ * Pomo beside the timer. Idle is vector (pomo-idle.tsx, from idle.svg); work
+ * and rest are layers cut from pomin.png (public/pomo/). Each scene loops its
+ * own small story: waiting with a hop and a wave, reading under a ticking
+ * stopwatch, asleep with drifting z's. Transform origins are the part's spot
+ * in its frame. Everything holds still for reduced motion.
+ */
+.pomo-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  width: 66%;
+  height: 6%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+
+[data-scene="work"] .pomo-shadow {
+  width: 74%;
+}
+
+[data-scene="rest"] .pomo-shadow {
+  width: 92%;
+}
+
+.pomo-read,
+.pomo-sleep {
+  transform-origin: 50% 96%;
+}
+
+.pomo-idle-hop {
+  transform-origin: 51.8% 92.4%;
+}
+
+.pomo-idle-wave {
+  transform-origin: 23.4% 55.7%;
+}
+
+.pomo-idle-leaves {
+  transform-origin: 57.7% 34%;
+}
+
+.pomo-idle-shadow,
+.pomo-idle-blink,
+.pomo-idle-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pomo-idle-spark {
+  transform-origin: 50% 100%;
+}
+
+.pomo-idle-spark-b {
+  transform-origin: 100% 80%;
+}
+
+.pomo-tick {
+  transform-origin: 51.5% 16%;
+}
+
+.pomo-flash {
+  transform-origin: 80% 29.5%;
+}
+
+.pomo-z-small {
+  transform-origin: 70% 39%;
+}
+
+.pomo-z-big {
+  transform-origin: 83.5% 30%;
+}
+
+/*
+ * Idle: a little hop with a squash on landing, the leaves bouncing after it
+ * and the sparks popping at the top. Now and then a wave, a blink, a glance.
+ */
+@keyframes pomo-hop {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1, 1);
   }
-  50% {
-    transform: translateY(-12px) scale(1.03);
+  10% {
+    transform: translateY(0) scale(1.04, 0.95);
+  }
+  30% {
+    transform: translateY(-14px) scale(0.98, 1.03);
+  }
+  45% {
+    transform: translateY(0) scale(1.03, 0.97);
+  }
+  55% {
+    transform: translateY(0) scale(1, 1);
   }
 }
 
-@utility animate-breathe {
-  transform-origin: 50% 100%;
-  @media (prefers-reduced-motion: no-preference) {
-    animation: breathe 4s ease-in-out infinite;
+@keyframes pomo-spark {
+  0%,
+  15%,
+  60%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  30% {
+    transform: scale(1.12) rotate(-6deg);
+    opacity: 1;
+  }
+}
+
+@keyframes pomo-idle-leaves {
+  0%,
+  40%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-5deg);
+  }
+  62% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes pomo-idle-wave {
+  0%,
+  30%,
+  100% {
+    transform: rotate(0deg);
+  }
+  8%,
+  16% {
+    transform: rotate(30deg);
+  }
+  12%,
+  20% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes pomo-idle-blink {
+  0%,
+  90%,
+  96%,
+  100% {
+    transform: scaleY(1);
+  }
+  93% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes pomo-idle-look {
+  0%,
+  20%,
+  50%,
+  56%,
+  86%,
+  100% {
+    transform: translate(0, 0);
+  }
+  26%,
+  44% {
+    transform: translate(-14px, 0);
+  }
+  62%,
+  80% {
+    transform: translate(10px, 4px);
+  }
+}
+
+@keyframes pomo-shadow-hop {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+}
+
+/* Working: leaning into the book, under a stopwatch that ticks. */
+@keyframes pomo-read {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-1.4deg) translateY(-2px);
+  }
+  50% {
+    transform: rotate(0deg) translateY(0);
+  }
+  75% {
+    transform: rotate(1.4deg) translateY(-2px);
+  }
+}
+
+@keyframes pomo-tick {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  8% {
+    transform: translateY(-3px) rotate(-7deg);
+  }
+  16% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0deg);
+  }
+  58% {
+    transform: translateY(-6px) rotate(7deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(0deg);
+  }
+}
+
+@keyframes pomo-flash {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.8);
+    opacity: 0.35;
+  }
+}
+
+/* Resting: only a slow breath, the body swelling a touch where it lies;
+   the z's float up and fade away. */
+@keyframes pomo-sleep {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.006, 1.014);
+  }
+}
+
+@keyframes pomo-z {
+  0% {
+    transform: translate(-10px, 14px) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(10px, -26px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* A change of scene pops Pomo in. */
+@keyframes pomo-enter {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pomo-scene {
+    animation: pomo-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .pomo-idle-hop {
+    animation: pomo-hop 2.8s ease-in-out infinite;
+  }
+  .pomo-idle-leaves {
+    animation: pomo-idle-leaves 2.8s ease-in-out infinite;
+  }
+  .pomo-idle-shadow {
+    animation: pomo-shadow-hop 2.8s ease-in-out infinite;
+  }
+  .pomo-idle-spark {
+    animation: pomo-spark 2.8s ease-in-out infinite;
+  }
+  .pomo-idle-spark-b {
+    animation-delay: -0.2s;
+  }
+  .pomo-idle-wave {
+    animation: pomo-idle-wave 5.6s ease-in-out infinite;
+  }
+  .pomo-idle-blink {
+    animation: pomo-idle-blink 4.2s linear infinite;
+  }
+  .pomo-idle-look {
+    animation: pomo-idle-look 7s ease-in-out infinite;
+  }
+  .pomo-read {
+    animation: pomo-read 3.2s ease-in-out infinite;
+  }
+  .pomo-tick {
+    animation: pomo-tick 2s ease-in-out infinite;
+  }
+  .pomo-flash {
+    animation: pomo-flash 1s ease-in-out infinite;
+  }
+  .pomo-sleep {
+    animation: pomo-sleep 5s ease-in-out infinite;
+  }
+  .pomo-z {
+    animation: pomo-z 4.5s ease-in-out infinite;
+  }
+  .pomo-z-big {
+    animation-delay: -2.25s;
   }
 }

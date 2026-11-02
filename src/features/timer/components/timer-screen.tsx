@@ -129,7 +129,7 @@ export function TimerScreen() {
             onSelect={timer.selectSkill}
           />
         </div>
-        <TimerArt mood={mood} breathing={running} />
+        <TimerArt mood={mood} />
       </section>
       <ShortcutsHint />
     </>

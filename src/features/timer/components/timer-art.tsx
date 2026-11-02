@@ -1,38 +1,74 @@
 import Image from "next/image";
-import { Pomo, type PomoMood } from "@/ui/pomo";
+import type { PomoMood } from "@/ui/pomo";
+import { PomoIdle } from "./pomo-idle";
+
+type Scene = "idle" | "work" | "rest";
+type RasterScene = Exclude<Scene, "idle">;
 
 /**
- * The illustration beside the timer. Put the picture in `public/` and set its
- * path here, for example "/timer-art.png"; while it is null Pomo stands in
- * its place, breathing while the timer runs.
+ * Work and rest are PNG layers (idle is vector, in pomo-idle.tsx). Every
+ * layer is cut from the same 960×1160 frame (2× for sharp screens), so
+ * they stack exactly with `inset-0`; each one animates on its own (see the
+ * `pomo-*` classes in globals.css).
  */
-const TIMER_ART_SRC: string | null = null;
+const LAYERS: Record<RasterScene, { src: string; className: string }[]> = {
+  work: [
+    { src: "/pomo/work-body.png", className: "pomo-read" },
+    { src: "/pomo/work-clock.png", className: "pomo-tick" },
+    { src: "/pomo/work-sparks.png", className: "pomo-flash" },
+  ],
+  rest: [
+    { src: "/pomo/rest-body.png", className: "pomo-sleep" },
+    { src: "/pomo/rest-z-small.png", className: "pomo-z pomo-z-small" },
+    { src: "/pomo/rest-z-big.png", className: "pomo-z pomo-z-big" },
+  ],
+};
 
-export function TimerArt({
-  mood,
-  breathing,
-}: {
-  mood: PomoMood;
-  breathing: boolean;
-}) {
+const SCENE: Record<PomoMood, Scene> = {
+  happy: "idle",
+  proud: "idle",
+  focused: "work",
+  resting: "rest",
+};
+
+/**
+ * Pomo beside the timer: waiting, reading through a focus block, or asleep
+ * through a break. Decorative; the clock states the phase in words.
+ */
+export function TimerArt({ mood }: { mood: PomoMood }) {
+  const scene = SCENE[mood];
   return (
-    <div className="relative hidden aspect-[4/3] w-full items-center justify-center md:flex">
-      {TIMER_ART_SRC ? (
-        <Image
-          src={TIMER_ART_SRC}
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-contain"
-        />
-      ) : (
-        <Pomo
-          mood={mood}
-          size={320}
-          className={`h-auto w-[min(20rem,70%)] ${breathing ? "animate-breathe" : ""}`}
-        />
-      )}
+    <div
+      aria-hidden
+      className="relative hidden aspect-[4/3] w-full items-center justify-center md:flex"
+    >
+      {/* Keyed so a change of phase plays the entrance again. */}
+      <div
+        key={scene}
+        data-scene={scene}
+        className="pomo-scene relative aspect-[960/1160] h-full max-h-[26rem]"
+      >
+        {scene === "idle" ? (
+          <PomoIdle />
+        ) : (
+          <>
+            <span className="pomo-shadow" />
+            {LAYERS[scene].map((layer) => (
+              <Image
+                key={layer.src}
+                src={layer.src}
+                alt=""
+                width={960}
+                height={1160}
+                sizes="22rem"
+                quality={90}
+                priority
+                className={`absolute inset-0 h-full w-full select-none ${layer.className}`}
+              />
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }
