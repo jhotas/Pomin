@@ -68,9 +68,9 @@ export function ClockRing({
         <div
           role="timer"
           aria-label="Time left"
-          className="font-display text-ring font-semibold num"
+          className="font-display text-ring font-semibold"
         >
-          {clock}
+          <FixedDigits text={clock} />
         </div>
         {children}
       </div>
@@ -78,5 +78,22 @@ export function ClockRing({
         {status}
       </p>
     </div>
+  );
+}
+
+/**
+ * Fredoka has no tabular figures (`tabular-nums` changes nothing in it), so
+ * each digit gets a box as wide as the widest one; otherwise "11:11" is a
+ * third narrower than "00:00" and the centred time jumps on every tick.
+ */
+function FixedDigits({ text }: { text: string }) {
+  return [...text].map((char, index) =>
+    /\d/.test(char) ? (
+      <span key={index} className="inline-block w-[0.58em] text-center">
+        {char}
+      </span>
+    ) : (
+      char
+    ),
   );
 }
