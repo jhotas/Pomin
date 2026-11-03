@@ -11,7 +11,7 @@ import { PHASE_COLOR, PHASE_LABEL } from "../phase";
 import { useTimer } from "../use-timer";
 import { useTimerShortcuts } from "../use-timer-shortcuts";
 import { ClockRing } from "./clock-ring";
-import { PomoDots } from "./pomo-dots";
+import { RoundTomatoes } from "./round-tomatoes";
 import { ShortcutsHint } from "./shortcuts-hint";
 import { SkillPicker } from "./skill-picker";
 import { PomoPerch, TimerArt } from "./timer-art";
@@ -81,7 +81,7 @@ export function TimerScreen() {
             share={1 - timer.remainingMs / state.plannedMs}
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
-            above={<PomoDots done={done} total={round} />}
+            above={<RoundTomatoes done={done} total={round} />}
             perch={<PomoPerch mood={mood} />}
           >
             <div className="flex items-center gap-3">

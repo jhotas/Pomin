@@ -31,6 +31,24 @@ export function masteryCells(focusedSeconds: number, targetHours: number) {
   };
 }
 
+/**
+ * A skill's level, game style: going from level L to L + 1 takes L hours, so
+ * level 2 comes at 1 hour, 3 at 3, 4 at 6 and 5 at 10. Early levels come in
+ * the first sessions and later ones take longer. `share` (0-1) is how far
+ * the current level has come.
+ */
+export function skillLevel(focusedSeconds: number) {
+  const hours = Math.max(0, focusedSeconds) / 3600;
+  const level = Math.floor((1 + Math.sqrt(1 + 8 * hours)) / 2);
+  const intoHours = hours - (level * (level - 1)) / 2;
+  return {
+    level,
+    intoSeconds: intoHours * 3600,
+    levelHours: level,
+    share: Math.min(1, Math.max(0, intoHours / level)),
+  };
+}
+
 /** Local midnight `days` days after `date` (negative goes back). */
 function localDay(date: Date, days = 0): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
