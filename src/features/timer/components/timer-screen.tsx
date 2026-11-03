@@ -14,14 +14,14 @@ import { ClockRing } from "./clock-ring";
 import { PomoDots } from "./pomo-dots";
 import { ShortcutsHint } from "./shortcuts-hint";
 import { SkillPicker } from "./skill-picker";
-import { TimerArt } from "./timer-art";
+import { PomoPerch, TimerArt } from "./timer-art";
 
 /**
  * The home page, over the phase's colour from the shell: the countdown in its
  * ring with start, pause and reset under the time and the skill under the
- * ring on the left, and an illustration (Pomo until there is one) on the
- * right. Space, S and R work as everywhere, listed in a pill that rises from
- * the bottom edge on hover.
+ * ring on the left, and Pomo on the right (on phones, sitting on the ring).
+ * Space, S and R work as everywhere, listed in a pill that rises from the
+ * bottom edge on hover.
  */
 export function TimerScreen() {
   const timer = useTimer();
@@ -82,6 +82,7 @@ export function TimerScreen() {
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
             above={<PomoDots done={done} total={round} />}
+            perch={<PomoPerch mood={mood} />}
           >
             <div className="flex items-center gap-3">
               <button

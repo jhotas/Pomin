@@ -12,6 +12,8 @@ type ClockRingProps = {
   above?: ReactNode;
   /** The controls, set under the time inside the ring. */
   children: ReactNode;
+  /** Placed against the ring's top edge, for something sitting on it. */
+  perch?: ReactNode;
 };
 
 const RADIUS = 88;
@@ -29,6 +31,7 @@ export function ClockRing({
   status,
   above,
   children,
+  perch,
 }: ClockRingProps) {
   const filled = Math.min(1, Math.max(0, share)) * CIRCUMFERENCE;
   return (
@@ -74,6 +77,7 @@ export function ClockRing({
         </div>
         {children}
       </div>
+      {perch}
       <p aria-live="polite" className="sr-only">
         {status}
       </p>

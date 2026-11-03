@@ -160,7 +160,8 @@
  * and rest are layers cut from pomin.png (public/pomo/). Each scene loops its
  * own small story: waiting with a hop and a wave, reading under a ticking
  * stopwatch, asleep with drifting z's. Transform origins are the part's spot
- * in its frame. Everything holds still for reduced motion.
+ * in its frame, and moves are in % of it, so a small Pomo moves as much for
+ * its size as a big one. Everything holds still for reduced motion.
  */
 .pomo-shadow {
   position: absolute;
@@ -242,7 +243,7 @@
     transform: translateY(0) scale(1.04, 0.95);
   }
   30% {
-    transform: translateY(-14px) scale(0.98, 1.03);
+    transform: translateY(-3.4%) scale(0.98, 1.03);
   }
   45% {
     transform: translateY(0) scale(1.03, 0.97);
@@ -340,6 +341,189 @@
   }
 }
 
+/*
+ * A cheer for a focus block just done, played once over the idle loops
+ * (celebration.ts sets data-cheer, and clears it as these end): a big jump
+ * with the arm up, the leaves shaking and the sparks bursting. The end of a
+ * round gets two jumps, a spin in the second, and eyes shut with joy. The
+ * spin turns about the body's middle, not the feet the hop squashes on, so
+ * its keyframes shift there and back around the rotate.
+ */
+@keyframes pomo-cheer-hop {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  14% {
+    transform: translateY(0) scale(1.08, 0.9);
+  }
+  34% {
+    transform: translateY(-16%) scale(0.95, 1.07);
+  }
+  46% {
+    transform: translateY(-17%) scale(1, 1);
+  }
+  62% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  74% {
+    transform: translateY(-2.5%) scale(0.99, 1.02);
+  }
+  86%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+@keyframes pomo-cheer-round-hop {
+  0% {
+    transform: translateY(0) translateY(-34%) rotate(0deg) translateY(34%)
+      scale(1, 1);
+  }
+  8% {
+    transform: translateY(0) translateY(-34%) rotate(0deg) translateY(34%)
+      scale(1.08, 0.9);
+  }
+  20% {
+    transform: translateY(-13%) translateY(-34%) rotate(0deg) translateY(34%)
+      scale(0.95, 1.07);
+  }
+  32% {
+    transform: translateY(0) translateY(-34%) rotate(0deg) translateY(34%)
+      scale(1.08, 0.92);
+  }
+  40% {
+    transform: translateY(0) translateY(-34%) rotate(0deg) translateY(34%)
+      scale(1.12, 0.86);
+  }
+  57% {
+    transform: translateY(-24%) translateY(-34%) rotate(200deg) translateY(34%)
+      scale(0.97, 1.04);
+  }
+  72% {
+    transform: translateY(0) translateY(-34%) rotate(360deg) translateY(34%)
+      scale(1.1, 0.9);
+  }
+  82% {
+    transform: translateY(-2.5%) translateY(-34%) rotate(360deg) translateY(34%)
+      scale(0.99, 1.02);
+  }
+  92%,
+  100% {
+    transform: translateY(0) translateY(-34%) rotate(360deg) translateY(34%)
+      scale(1, 1);
+  }
+}
+
+@keyframes pomo-cheer-shadow {
+  0%,
+  14%,
+  62%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pomo-cheer-round-shadow {
+  0%,
+  8%,
+  32%,
+  40%,
+  72%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  57% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+}
+
+/* The arm goes up and shakes there, then comes down as the cheer ends. */
+@keyframes pomo-cheer-arm {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  14%,
+  80% {
+    transform: rotate(105deg);
+  }
+  26%,
+  50% {
+    transform: rotate(92deg);
+  }
+  38%,
+  62% {
+    transform: rotate(115deg);
+  }
+}
+
+@keyframes pomo-cheer-leaves {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15%,
+  55% {
+    transform: rotate(-9deg);
+  }
+  30%,
+  70% {
+    transform: rotate(7deg);
+  }
+  85% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes pomo-cheer-spark {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  12% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  34% {
+    transform: scale(1.5) rotate(-10deg);
+    opacity: 1;
+  }
+  55% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.3) rotate(6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+}
+
+@keyframes pomo-cheer-eyes {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  10%,
+  88% {
+    transform: scaleY(0.12);
+  }
+}
+
 /* Working: leaning into the book, under a stopwatch that ticks. */
 @keyframes pomo-read {
   0%,
@@ -347,13 +531,13 @@
     transform: rotate(0deg) translateY(0);
   }
   25% {
-    transform: rotate(-1.4deg) translateY(-2px);
+    transform: rotate(-1.4deg) translateY(-0.5%);
   }
   50% {
     transform: rotate(0deg) translateY(0);
   }
   75% {
-    transform: rotate(1.4deg) translateY(-2px);
+    transform: rotate(1.4deg) translateY(-0.5%);
   }
 }
 
@@ -363,19 +547,19 @@
     transform: translateY(0) rotate(0deg);
   }
   8% {
-    transform: translateY(-3px) rotate(-7deg);
+    transform: translateY(-0.7%) rotate(-7deg);
   }
   16% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-4px) rotate(0deg);
+    transform: translateY(-1%) rotate(0deg);
   }
   58% {
-    transform: translateY(-6px) rotate(7deg);
+    transform: translateY(-1.4%) rotate(7deg);
   }
   66% {
-    transform: translateY(-4px) rotate(0deg);
+    transform: translateY(-1%) rotate(0deg);
   }
 }
 
@@ -405,7 +589,7 @@
 
 @keyframes pomo-z {
   0% {
-    transform: translate(-10px, 14px) scale(0.6);
+    transform: translate(-2.9%, 3.4%) scale(0.6);
     opacity: 0;
   }
   25% {
@@ -415,7 +599,7 @@
     opacity: 1;
   }
   100% {
-    transform: translate(10px, -26px) scale(1.1);
+    transform: translate(2.9%, -6.2%) scale(1.1);
     opacity: 0;
   }
 }
@@ -477,5 +661,40 @@
   }
   .pomo-z-big {
     animation-delay: -2.25s;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-hop {
+    animation: pomo-cheer-hop 1.6s ease-in-out both;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-shadow {
+    animation: pomo-cheer-shadow 1.6s ease-in-out both;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-wave {
+    animation: pomo-cheer-arm 1.6s ease-in-out both;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-leaves {
+    animation: pomo-cheer-leaves 1.6s ease-in-out both;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-spark {
+    animation: pomo-cheer-spark 1.6s ease-out both;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-spark-b {
+    animation-delay: 0.1s;
+  }
+  .pomo-idle[data-cheer] .pomo-idle-look {
+    animation: none;
+  }
+  .pomo-idle[data-cheer="round"] :is(.pomo-idle-hop, .pomo-idle-shadow) {
+    animation-duration: 2.4s;
+    animation-name: pomo-cheer-round-hop;
+  }
+  .pomo-idle[data-cheer="round"] .pomo-idle-shadow {
+    animation-name: pomo-cheer-round-shadow;
+  }
+  .pomo-idle[data-cheer="round"]
+    :is(.pomo-idle-wave, .pomo-idle-leaves, .pomo-idle-spark) {
+    animation-duration: 2.4s;
+  }
+  .pomo-idle[data-cheer="round"] .pomo-idle-blink {
+    animation: pomo-cheer-eyes 2.4s ease-in-out both;
   }
 }

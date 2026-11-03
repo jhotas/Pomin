@@ -3,19 +3,26 @@
  * stacked layers that share one viewBox, so each moving part animates on its
  * own: the body hops, the left arm waves, the leaves bounce, the eyes blink
  * and glance, the sparks pop. See the `pomo-idle-*` classes in globals.css.
- * Ids carry a prefix so they cannot clash with anything else on the page.
+ * A `cheer` swaps those loops for one celebration (the `pomo-cheer-*` ones).
+ * Ids carry a prefix unique to each Pomo, so they cannot clash with anything
+ * else on the page, nor with another Pomo: a url(#id) finds the first match,
+ * and if that sits in a hidden copy its gradients and clips do not render.
  * Every layer keeps the source's root fill="none": without it the open mouth
  * stroke gets a black fill. The pupils are cut by a clipPath, not a mask: a
  * mask is rasterised inside a fixed box, and a pupil gliding past that box
  * left dark bars at the edge of the eye.
  */
 
+import { useId } from "react";
+import type { Cheer } from "../celebration";
+
 const VIEWBOX = "170 100 728 880";
 const LAYER = "absolute inset-0 h-full w-full overflow-visible";
 
-export function PomoIdle() {
+export function PomoIdle({ cheer }: { cheer?: Cheer | null }) {
+  const ids = `pomo-idle-${useId().replace(/[^\w-]/g, "")}-`;
   return (
-    <div className="pomo-idle absolute inset-0">
+    <div className="pomo-idle absolute inset-0" data-cheer={cheer ?? undefined}>
       <svg viewBox={VIEWBOX} fill="none" className={LAYER}>
         {/* shadow */}
         <ellipse
@@ -33,7 +40,7 @@ export function PomoIdle() {
           {/* feet and right arm */}
           <defs>
             <filter
-              id="pomo-idle-filter0_g_1_2"
+              id={`${ids}filter0_g_1_2`}
               x="560.61"
               y="751.04"
               width="127.43"
@@ -246,7 +253,7 @@ export function PomoIdle() {
               />
             </filter>
             <linearGradient
-              id="pomo-idle-paint0_linear_1_2"
+              id={`${ids}paint0_linear_1_2`}
               x1="618.78"
               y1="759.53"
               x2="618.78"
@@ -257,7 +264,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint1_linear_1_2"
+              id={`${ids}paint1_linear_1_2`}
               x1="618.78"
               y1="759.53"
               x2="618.78"
@@ -268,7 +275,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <filter
-              id="pomo-idle-filter1_g_1_2"
+              id={`${ids}filter1_g_1_2`}
               x="478.88"
               y="653.99"
               width="283.34"
@@ -303,7 +310,7 @@ export function PomoIdle() {
               </feMerge>
             </filter>
             <filter
-              id="pomo-idle-filter2_g_1_2"
+              id={`${ids}filter2_g_1_2`}
               x="699.43"
               y="639.32"
               width="155.95"
@@ -516,7 +523,7 @@ export function PomoIdle() {
               />
             </filter>
             <linearGradient
-              id="pomo-idle-paint2_linear_1_2"
+              id={`${ids}paint2_linear_1_2`}
               x1="764.71"
               y1="652.97"
               x2="764.71"
@@ -527,7 +534,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint3_linear_1_2"
+              id={`${ids}paint3_linear_1_2`}
               x1="764.71"
               y1="652.97"
               x2="764.71"
@@ -538,7 +545,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <filter
-              id="pomo-idle-filter3_g_1_2"
+              id={`${ids}filter3_g_1_2`}
               x="600.99"
               y="517.46"
               width="335.63"
@@ -573,7 +580,7 @@ export function PomoIdle() {
               </feMerge>
             </filter>
             <filter
-              id="pomo-idle-filter4_g_1_2"
+              id={`${ids}filter4_g_1_2`}
               x="410.43"
               y="754.9"
               width="124.81"
@@ -786,7 +793,7 @@ export function PomoIdle() {
               />
             </filter>
             <linearGradient
-              id="pomo-idle-paint4_linear_1_2"
+              id={`${ids}paint4_linear_1_2`}
               x1="472.55"
               y1="759.13"
               x2="472.55"
@@ -797,7 +804,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint5_linear_1_2"
+              id={`${ids}paint5_linear_1_2`}
               x1="472.55"
               y1="759.13"
               x2="472.55"
@@ -808,7 +815,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <filter
-              id="pomo-idle-filter5_g_1_2"
+              id={`${ids}filter5_g_1_2`}
               x="336.36"
               y="664.27"
               width="272.28"
@@ -843,7 +850,7 @@ export function PomoIdle() {
               </feMerge>
             </filter>
           </defs>
-          <g filter="url(#pomo-idle-filter0_g_1_2)">
+          <g filter={`url(#${ids}filter0_g_1_2)`}>
             <rect
               x="560.45"
               y="759.53"
@@ -851,11 +858,11 @@ export function PomoIdle() {
               height="153.91"
               rx="58.33"
               transform="rotate(-4.25 560.45 759.53)"
-              fill="url(#pomo-idle-paint0_linear_1_2)"
+              fill={`url(#${ids}paint0_linear_1_2)`}
             />
           </g>
           <mask
-            id="pomo-idle-mask0_1_2"
+            id={`${ids}mask0_1_2`}
             style={{ maskType: "alpha" }}
             maskUnits="userSpaceOnUse"
             x="564"
@@ -870,11 +877,11 @@ export function PomoIdle() {
               height="153.91"
               rx="58.33"
               transform="rotate(-4.25 560.45 759.53)"
-              fill="url(#pomo-idle-paint1_linear_1_2)"
+              fill={`url(#${ids}paint1_linear_1_2)`}
             />
           </mask>
-          <g mask="url(#pomo-idle-mask0_1_2)">
-            <g filter="url(#pomo-idle-filter1_g_1_2)">
+          <g mask={`url(#${ids}mask0_1_2)`}>
+            <g filter={`url(#${ids}filter1_g_1_2)`}>
               <rect
                 x="518.88"
                 y="708.19"
@@ -885,7 +892,7 @@ export function PomoIdle() {
               />
             </g>
           </g>
-          <g filter="url(#pomo-idle-filter2_g_1_2)">
+          <g filter={`url(#${ids}filter2_g_1_2)`}>
             <rect
               x="694.98"
               y="652.97"
@@ -893,11 +900,11 @@ export function PomoIdle() {
               height="204.83"
               rx="69.73"
               transform="rotate(-7.46 694.98 652.97)"
-              fill="url(#pomo-idle-paint2_linear_1_2)"
+              fill={`url(#${ids}paint2_linear_1_2)`}
             />
           </g>
           <mask
-            id="pomo-idle-mask1_1_2"
+            id={`${ids}mask1_1_2`}
             style={{ maskType: "alpha" }}
             maskUnits="userSpaceOnUse"
             x="703"
@@ -912,11 +919,11 @@ export function PomoIdle() {
               height="204.83"
               rx="69.73"
               transform="rotate(-7.46 694.98 652.97)"
-              fill="url(#pomo-idle-paint3_linear_1_2)"
+              fill={`url(#${ids}paint3_linear_1_2)`}
             />
           </mask>
-          <g mask="url(#pomo-idle-mask1_1_2)">
-            <g filter="url(#pomo-idle-filter3_g_1_2)">
+          <g mask={`url(#${ids}mask1_1_2)`}>
+            <g filter={`url(#${ids}filter3_g_1_2)`}>
               <rect
                 x="640.99"
                 y="587.18"
@@ -927,7 +934,7 @@ export function PomoIdle() {
               />
             </g>
           </g>
-          <g filter="url(#pomo-idle-filter4_g_1_2)">
+          <g filter={`url(#${ids}filter4_g_1_2)`}>
             <rect
               x="414.21"
               y="759.13"
@@ -935,11 +942,11 @@ export function PomoIdle() {
               height="153.91"
               rx="58.33"
               transform="rotate(-0.22 414.21 759.13)"
-              fill="url(#pomo-idle-paint4_linear_1_2)"
+              fill={`url(#${ids}paint4_linear_1_2)`}
             />
           </g>
           <mask
-            id="pomo-idle-mask2_1_2"
+            id={`${ids}mask2_1_2`}
             style={{ maskType: "alpha" }}
             maskUnits="userSpaceOnUse"
             x="414"
@@ -954,11 +961,11 @@ export function PomoIdle() {
               height="153.91"
               rx="58.33"
               transform="rotate(-0.22 414.21 759.13)"
-              fill="url(#pomo-idle-paint5_linear_1_2)"
+              fill={`url(#${ids}paint5_linear_1_2)`}
             />
           </mask>
-          <g mask="url(#pomo-idle-mask2_1_2)">
-            <g filter="url(#pomo-idle-filter5_g_1_2)">
+          <g mask={`url(#${ids}mask2_1_2)`}>
+            <g filter={`url(#${ids}filter5_g_1_2)`}>
               <rect
                 x="376.36"
                 y="704.99"
@@ -978,7 +985,7 @@ export function PomoIdle() {
           {/* left arm, the one that waves */}
           <defs>
             <filter
-              id="pomo-idle-filter6_g_1_2"
+              id={`${ids}filter6_g_1_2`}
               x="217.52"
               y="565.9"
               width="168.75"
@@ -1191,7 +1198,7 @@ export function PomoIdle() {
               />
             </filter>
             <linearGradient
-              id="pomo-idle-paint6_linear_1_2"
+              id={`${ids}paint6_linear_1_2`}
               x1="338.99"
               y1="551.03"
               x2="338.99"
@@ -1202,7 +1209,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint7_linear_1_2"
+              id={`${ids}paint7_linear_1_2`}
               x1="338.99"
               y1="551.03"
               x2="338.99"
@@ -1213,7 +1220,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#FD753A" />
             </linearGradient>
             <filter
-              id="pomo-idle-filter7_g_1_2"
+              id={`${ids}filter7_g_1_2`}
               x="138.87"
               y="428.09"
               width="367.98"
@@ -1248,7 +1255,7 @@ export function PomoIdle() {
               </feMerge>
             </filter>
           </defs>
-          <g filter="url(#pomo-idle-filter6_g_1_2)">
+          <g filter={`url(#${ids}filter6_g_1_2)`}>
             <rect
               x="269.26"
               y="551.03"
@@ -1256,11 +1263,11 @@ export function PomoIdle() {
               height="204.83"
               rx="69.73"
               transform="rotate(18.98 269.26 551.03)"
-              fill="url(#pomo-idle-paint6_linear_1_2)"
+              fill={`url(#${ids}paint6_linear_1_2)`}
             />
           </g>
           <mask
-            id="pomo-idle-mask3_1_2"
+            id={`${ids}mask3_1_2`}
             style={{ maskType: "alpha" }}
             maskUnits="userSpaceOnUse"
             x="221"
@@ -1275,11 +1282,11 @@ export function PomoIdle() {
               height="204.83"
               rx="69.73"
               transform="rotate(18.98 269.26 551.03)"
-              fill="url(#pomo-idle-paint7_linear_1_2)"
+              fill={`url(#${ids}paint7_linear_1_2)`}
             />
           </mask>
-          <g mask="url(#pomo-idle-mask3_1_2)">
-            <g filter="url(#pomo-idle-filter7_g_1_2)">
+          <g mask={`url(#${ids}mask3_1_2)`}>
+            <g filter={`url(#${ids}filter7_g_1_2)`}>
               <rect
                 x="250.2"
                 y="468.09"
@@ -1295,7 +1302,7 @@ export function PomoIdle() {
           {/* body */}
           <defs>
             <linearGradient
-              id="pomo-idle-paint8_linear_1_2"
+              id={`${ids}paint8_linear_1_2`}
               x1="560"
               y1="304.41"
               x2="560"
@@ -1308,7 +1315,7 @@ export function PomoIdle() {
           </defs>
           <path
             d="M878.59 573.24C878.59 716.93 767.47 844.14 566.68 844.14C335.2 851.45 239.19 708.65 239.19 564.95C233.13 411.57 372.01 297.14 546.53 304.77C733.11 297 903.4 418.09 878.59 573.24Z"
-            fill="url(#pomo-idle-paint8_linear_1_2)"
+            fill={`url(#${ids}paint8_linear_1_2)`}
           />
         </svg>
         <svg
@@ -1319,7 +1326,7 @@ export function PomoIdle() {
           {/* leaf crown */}
           <defs>
             <linearGradient
-              id="pomo-idle-paint9_linear_1_2"
+              id={`${ids}paint9_linear_1_2`}
               x1="599.06"
               y1="233.42"
               x2="599.06"
@@ -1330,7 +1337,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#69CA5C" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint10_linear_1_2"
+              id={`${ids}paint10_linear_1_2`}
               x1="599.06"
               y1="233.42"
               x2="599.06"
@@ -1341,7 +1348,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#69CA5C" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint11_linear_1_2"
+              id={`${ids}paint11_linear_1_2`}
               x1="599.06"
               y1="233.42"
               x2="599.06"
@@ -1352,7 +1359,7 @@ export function PomoIdle() {
               <stop offset="1" stopColor="#69CA5C" />
             </linearGradient>
             <linearGradient
-              id="pomo-idle-paint12_linear_1_2"
+              id={`${ids}paint12_linear_1_2`}
               x1="599.06"
               y1="233.42"
               x2="599.06"
@@ -1365,14 +1372,14 @@ export function PomoIdle() {
           </defs>
           <path
             d="M667.2 439.89C608.22 442.33 552.16 383.35 552.16 383.35L613.58 354.1L687.67 366.29C687.67 366.29 726.18 437.46 667.2 439.89Z"
-            fill="url(#pomo-idle-paint9_linear_1_2)"
+            fill={`url(#${ids}paint9_linear_1_2)`}
           />
           <path
             d="M410.8 399.92C427.37 414.55 506.83 424.78 563.86 389.69L634.05 381.89C766.25 413.4 793.63 389.75 790.79 373.99C784.89 321.58 662.81 324.37 662.81 324.37C662.81 324.37 703.27 245.89 662.81 234.68C622.35 223.47 563.86 290.73 563.86 290.73C526.81 254.66 452.43 238.58 437.61 271.72C422.79 304.87 457.11 331.68 476.12 340.94C436.96 347.44 394.23 385.3 410.8 399.92Z"
-            fill="url(#pomo-idle-paint10_linear_1_2)"
+            fill={`url(#${ids}paint10_linear_1_2)`}
           />
           <mask
-            id="pomo-idle-mask4_1_2"
+            id={`${ids}mask4_1_2`}
             style={{ maskType: "alpha" }}
             maskUnits="userSpaceOnUse"
             x="407"
@@ -1382,14 +1389,14 @@ export function PomoIdle() {
           >
             <path
               d="M667.2 439.89C608.22 442.33 552.16 383.35 552.16 383.35L613.58 354.1L687.67 366.29C687.67 366.29 726.18 437.46 667.2 439.89Z"
-              fill="url(#pomo-idle-paint11_linear_1_2)"
+              fill={`url(#${ids}paint11_linear_1_2)`}
             />
             <path
               d="M410.8 399.92C427.37 414.55 506.83 424.78 563.86 389.69L634.05 381.89C766.25 413.4 793.63 389.75 790.79 373.99C784.89 321.58 662.81 324.37 662.81 324.37C662.81 324.37 703.27 245.89 662.81 234.68C622.35 223.47 563.86 290.73 563.86 290.73C526.81 254.66 452.43 238.58 437.61 271.72C422.79 304.87 457.11 331.68 476.12 340.94C436.96 347.44 394.23 385.3 410.8 399.92Z"
-              fill="url(#pomo-idle-paint12_linear_1_2)"
+              fill={`url(#${ids}paint12_linear_1_2)`}
             />
           </mask>
-          <g mask="url(#pomo-idle-mask4_1_2)">
+          <g mask={`url(#${ids}mask4_1_2)`}>
             <path
               d="M562.88 366.29C526.23 400.6 438.1 402.68 399.1 393.1L432.74 446.23L612.61 482.79L721.31 446.23C636.49 441.84 577.02 386.27 562.88 366.29Z"
               fill="#74A94C"
@@ -1422,7 +1429,7 @@ export function PomoIdle() {
                 transform="rotate(7.06 637.69 578.15)"
                 fill="white"
               />
-              <clipPath id="pomo-idle-eye-right">
+              <clipPath id={`${ids}eye-right`}>
                 <ellipse
                   cx="637.69"
                   cy="578.15"
@@ -1432,7 +1439,7 @@ export function PomoIdle() {
                   fill="white"
                 />
               </clipPath>
-              <g clipPath="url(#pomo-idle-eye-right)">
+              <g clipPath={`url(#${ids}eye-right)`}>
                 <g className="pomo-idle-look">
                   <ellipse
                     cx="657.87"
@@ -1454,7 +1461,7 @@ export function PomoIdle() {
                 transform="rotate(7.06 400.79 555.69)"
                 fill="white"
               />
-              <clipPath id="pomo-idle-eye-left">
+              <clipPath id={`${ids}eye-left`}>
                 <ellipse
                   cx="400.79"
                   cy="555.69"
@@ -1464,7 +1471,7 @@ export function PomoIdle() {
                   fill="white"
                 />
               </clipPath>
-              <g clipPath="url(#pomo-idle-eye-left)">
+              <g clipPath={`url(#${ids}eye-left)`}>
                 <g className="pomo-idle-look">
                   <ellipse
                     cx="420.97"

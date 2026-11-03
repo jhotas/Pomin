@@ -27,6 +27,20 @@ function notice(ended: PhaseChanged): { title: string; body: string } {
 }
 
 /**
+ * The latest phase in `events` that ended just now, run out or skipped. A
+ * phase that ended while the tab was closed is replayed late and not counted.
+ */
+export function freshPhaseEnd(
+  events: TimerEvent[],
+  now: number,
+): PhaseChanged | undefined {
+  return events.findLast(
+    (event): event is PhaseChanged =>
+      event.type === "phaseChanged" && now - event.at < FRESH_MS,
+  );
+}
+
+/**
  * Marks the latest phase that ended just now, run out or skipped: a fanfare
  * for the end of a round, a chime for any other focus block, a call back to
  * work at the end of a break; and, while the tab is out of sight, a
@@ -37,10 +51,7 @@ export function alertPhaseEnd(
   now: number,
   settings: Settings,
 ) {
-  const ended = events.findLast(
-    (event): event is PhaseChanged =>
-      event.type === "phaseChanged" && now - event.at < FRESH_MS,
-  );
+  const ended = freshPhaseEnd(events, now);
   if (!ended) return;
 
   if (settings.soundEnabled) {

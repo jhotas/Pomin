@@ -13,6 +13,7 @@ import {
   type TimerAction,
   type TimerEvent,
 } from "./core/timer";
+import { cheerPhaseEnd } from "./celebration";
 import { alertPhaseEnd } from "./phase-alerts";
 import type { TimerSnapshot } from "./timer-store";
 
@@ -99,6 +100,7 @@ export function useTimer() {
       // as finishing it.
       if (type === "tick" || type === "skip") {
         alertPhaseEnd(events, at, data.settings.get());
+        cheerPhaseEnd(events, at);
       }
     },
     [data],
