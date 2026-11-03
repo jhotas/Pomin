@@ -237,9 +237,12 @@
   transform-origin: 540px 940px;
 }
 
-.pomo-work-clock,
-.pomo-work-hand {
+.pomo-work-clock {
   transform-origin: 540px 168px;
+}
+
+.pomo-work-fill {
+  transition: stroke-dasharray 1s linear;
 }
 
 .pomo-work-sparks {
@@ -634,22 +637,22 @@
   45%,
   95%,
   100% {
-    transform: translate(6px, 0);
+    transform: translate(4px, 0);
   }
   20%,
   42%,
   62% {
-    transform: translate(-6px, 0);
+    transform: translate(-4px, 0);
   }
   67%,
   72% {
-    transform: translate(-11px, 6px);
+    transform: translate(-7px, 4px);
   }
   80% {
-    transform: translate(0, -3px);
+    transform: translate(0, -2px);
   }
   89% {
-    transform: translate(11px, 6px);
+    transform: translate(7px, 4px);
   }
 }
 
@@ -663,12 +666,6 @@
   72%,
   84% {
     transform: translateY(-9px);
-  }
-}
-
-@keyframes pomo-work-sweep {
-  to {
-    transform: rotate(360deg);
   }
 }
 
@@ -796,9 +793,6 @@
   }
   .pomo-work-clock {
     animation: pomo-tick 2s ease-in-out infinite;
-  }
-  .pomo-work-hand {
-    animation: pomo-work-sweep 12s steps(12) infinite;
   }
   .pomo-work-sparks {
     animation: pomo-flash 1s ease-in-out infinite;

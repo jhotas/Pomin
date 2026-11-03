@@ -2,7 +2,8 @@
  * Pomo reading through a focus block, drawn from working.svg. One SVG whose
  * moving parts are groups, each animated on its own (the `pomo-work-*`
  * classes in globals.css): Pomo sways over the book, the eyes run along the
- * lines and blink, the stopwatch ticks, the sparks flash, and every few
+ * lines and blink, the stopwatch fills with the block and wobbles, the
+ * sparks flash, and every few
  * seconds Pomo's hand reaches up and a page turns across the book, the eyes
  * and brows following it. Transform origins are in the art's own units.
  * The face is drawn before the book so the turning page passes in front of
@@ -28,7 +29,8 @@ const EYE_LEFT =
 const EYE_RIGHT =
   "M663.56 684.28C638.08 687.43 614.1 663.23 610.01 630.21C609.03 622.33 609.28 614.66 610.56 607.5L682.71 577.35C692.84 587.15 700.2 601.8 702.31 618.78C706.4 651.79 689.05 681.12 663.56 684.28Z";
 
-export function PomoWork() {
+/** `share` is how much of the focus block has passed, 0 to 1. */
+export function PomoWork({ share }: { share: number }) {
   const ids = `pomo-work-${useId().replace(/[^\w-]/g, "")}-`;
   const url = (name: string) => `url(#${ids}${name})`;
   return (
@@ -131,22 +133,26 @@ export function PomoWork() {
         />
 
         {/* eyes, which read along the lines and blink */}
+        {/*
+          The pupils fill the eye, so they cannot move inside it without
+          being cut: each eye glances as a whole, pupil and white together.
+        */}
         <g className="pomo-work-blink">
-          <path d={EYE_LEFT} fill="white" />
-          <path d={EYE_RIGHT} fill="white" />
-          <g fill="#532122">
-            <g clipPath={url("eye-left")}>
-              <path
-                className="pomo-work-look"
-                d="M457.52 685.14C478.1 687.69 497.46 668.15 500.77 641.5C502.22 629.73 500.31 618.54 495.94 609.5L451.26 592.1C438.51 598.77 428.53 613.81 426.24 632.26C422.94 658.92 436.95 682.59 457.52 685.14Z"
-              />
-            </g>
-            <g clipPath={url("eye-right")}>
-              <path
-                className="pomo-work-look"
-                d="M651.45 685.14C630.88 687.69 611.52 668.15 608.21 641.5C606.76 629.73 608.67 618.54 613.03 609.5L657.71 592.1C670.47 598.77 680.45 613.81 682.74 632.26C686.04 658.92 672.03 682.59 651.45 685.14Z"
-              />
-            </g>
+          <g className="pomo-work-look">
+            <path d={EYE_LEFT} fill="white" />
+            <path
+              clipPath={url("eye-left")}
+              d="M457.52 685.14C478.1 687.69 497.46 668.15 500.77 641.5C502.22 629.73 500.31 618.54 495.94 609.5L451.26 592.1C438.51 598.77 428.53 613.81 426.24 632.26C422.94 658.92 436.95 682.59 457.52 685.14Z"
+              fill="#532122"
+            />
+          </g>
+          <g className="pomo-work-look">
+            <path d={EYE_RIGHT} fill="white" />
+            <path
+              clipPath={url("eye-right")}
+              d="M651.45 685.14C630.88 687.69 611.52 668.15 608.21 641.5C606.76 629.73 608.67 618.54 613.03 609.5L657.71 592.1C670.47 598.77 680.45 613.81 682.74 632.26C686.04 658.92 672.03 682.59 651.45 685.14Z"
+              fill="#532122"
+            />
           </g>
         </g>
 
@@ -239,14 +245,21 @@ export function PomoWork() {
         <path d="M837.64 335.3C843.03 334.28 846.36 328.84 844.82 323.58L841.74 313.06C840.21 307.84 834.53 305.05 829.46 307.03L784 324.79C779.52 326.54 777.12 331.42 778.47 336.04L779.01 337.89C780.35 342.47 784.95 345.28 789.64 344.4L837.64 335.3Z" />
       </g>
 
-      {/* stopwatch, its hand ticking round */}
+      {/* stopwatch, its face filling clockwise as the block runs */}
       <g className="pomo-work-clock">
         <rect x="506" y="47" width="67" height="25" rx="12.5" fill="#F5543B" />
         <circle cx="539.5" cy="167.5" r="87.5" fill="#FDEEE7" />
-        <path
-          className="pomo-work-hand"
-          d="M540 89C546.9 89 553.78 89.91 560.45 91.69L540 168V89Z"
-          fill="#FC6E2E"
+        {/* A dash on a circle half the face's radius, as wide as the face. */}
+        <circle
+          className="pomo-work-fill"
+          cx="539.5"
+          cy="167.5"
+          r="40"
+          stroke="#FC6E2E"
+          strokeWidth="80"
+          pathLength={100}
+          strokeDasharray={`${Math.min(1, Math.max(0, share)) * 100} 100`}
+          transform="rotate(-90 539.5 167.5)"
         />
         <circle
           cx="539.5"

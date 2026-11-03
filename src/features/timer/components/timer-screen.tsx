@@ -67,6 +67,7 @@ export function TimerScreen() {
   // Pomo works through a running focus block and rests through the breaks.
   const mood =
     state.phase !== "focus" ? "resting" : running ? "focused" : "happy";
+  const share = 1 - timer.remainingMs / state.plannedMs;
 
   return (
     <>
@@ -78,11 +79,11 @@ export function TimerScreen() {
         <div className="flex flex-col items-center gap-6 md:gap-8">
           <ClockRing
             clock={clock}
-            share={1 - timer.remainingMs / state.plannedMs}
+            share={share}
             stroke={colors.stroke}
             status={`${phaseLabel}, ${state.status}`}
             above={<RoundTomatoes done={done} total={round} />}
-            perch={<PomoPerch mood={mood} />}
+            perch={<PomoPerch mood={mood} share={share} />}
           >
             <div className="flex items-center gap-3">
               <button
@@ -130,7 +131,7 @@ export function TimerScreen() {
             onSelect={timer.selectSkill}
           />
         </div>
-        <TimerArt mood={mood} />
+        <TimerArt mood={mood} share={share} />
       </section>
       <ShortcutsHint />
     </>
