@@ -178,8 +178,9 @@
 }
 
 /*
- * Pomo beside the timer. Idle is vector (pomo-idle.tsx, from idle.svg); work
- * and rest are layers cut from pomin.png (public/pomo/). Each scene loops its
+ * Pomo beside the timer. Idle and work are vector (pomo-idle.tsx and
+ * pomo-work.tsx, from idle.svg and working.svg); rest is layers cut from
+ * pomin.png (public/pomo/). Each scene loops its
  * own small story: waiting with a hop and a wave, reading under a ticking
  * stopwatch, asleep with drifting z's. Transform origins are the part's spot
  * in its frame, and moves are in % of it, so a small Pomo moves as much for
@@ -196,15 +197,10 @@
   background: color-mix(in srgb, var(--text) 9%, transparent);
 }
 
-[data-scene="work"] .pomo-shadow {
-  width: 74%;
-}
-
 [data-scene="rest"] .pomo-shadow {
   width: 92%;
 }
 
-.pomo-read,
 .pomo-sleep {
   transform-origin: 50% 96%;
 }
@@ -236,12 +232,37 @@
   transform-origin: 100% 80%;
 }
 
-.pomo-tick {
-  transform-origin: 51.5% 16%;
+/* Work origins are in working.svg units: the scene is a single SVG. */
+.pomo-work-read {
+  transform-origin: 540px 940px;
 }
 
-.pomo-flash {
-  transform-origin: 80% 29.5%;
+.pomo-work-clock,
+.pomo-work-hand {
+  transform-origin: 540px 168px;
+}
+
+.pomo-work-sparks {
+  transform-origin: 770px 330px;
+}
+
+.pomo-work-blink {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* The page pivots on the spine; it shows only while it turns. */
+.pomo-work-page {
+  transform-origin: 581px 769px;
+  opacity: 0;
+}
+
+.pomo-work-grab {
+  transform-origin: 300px 822px;
+}
+
+.pomo-work-brows {
+  transform-origin: 554px 590px;
 }
 
 .pomo-z-small {
@@ -546,7 +567,111 @@
   }
 }
 
-/* Working: leaning into the book, under a stopwatch that ticks. */
+/*
+ * Working: leaning into the book, under a stopwatch that ticks. On one 9s
+ * loop the eyes run along three lines, then the hand reaches for the corner
+ * and the page turns across, the eyes following it and the brows lifting.
+ * The page flips over the top of the book: it rises from the left half,
+ * shrinks to an edge as it stands up, and settles on the right half.
+ */
+@keyframes pomo-page {
+  0%,
+  70% {
+    transform: rotate(-157.4deg) scale(0.89, -1);
+    opacity: 0;
+  }
+  71% {
+    transform: rotate(-157.4deg) scale(0.89, -1);
+    opacity: 1;
+  }
+  74% {
+    transform: rotate(-140deg) scale(0.8, -0.9);
+  }
+  77% {
+    transform: rotate(-112deg) scale(0.68, -0.7);
+  }
+  80% {
+    transform: rotate(-90deg) scale(0.55, 0);
+  }
+  83% {
+    transform: rotate(-68deg) scale(0.68, 0.7);
+  }
+  86% {
+    transform: rotate(-40deg) scale(0.85, 0.9);
+  }
+  89% {
+    transform: rotate(-22deg) scale(1, 1);
+    opacity: 1;
+  }
+  91%,
+  100% {
+    transform: rotate(-22deg) scale(1, 1);
+    opacity: 0;
+  }
+}
+
+@keyframes pomo-work-grab {
+  0%,
+  62%,
+  86%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  69% {
+    transform: translate(30px, -48px) rotate(12deg);
+  }
+  74% {
+    transform: translate(48px, -62px) rotate(20deg);
+  }
+  80% {
+    transform: translate(10px, -10px) rotate(4deg);
+  }
+}
+
+@keyframes pomo-work-look {
+  0%,
+  23%,
+  45%,
+  95%,
+  100% {
+    transform: translate(6px, 0);
+  }
+  20%,
+  42%,
+  62% {
+    transform: translate(-6px, 0);
+  }
+  67%,
+  72% {
+    transform: translate(-11px, 6px);
+  }
+  80% {
+    transform: translate(0, -3px);
+  }
+  89% {
+    transform: translate(11px, 6px);
+  }
+}
+
+@keyframes pomo-work-brows {
+  0%,
+  64%,
+  92%,
+  100% {
+    transform: translateY(0);
+  }
+  72%,
+  84% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes pomo-work-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes pomo-read {
   0%,
   100% {
@@ -666,14 +791,32 @@
   .pomo-idle-look {
     animation: pomo-idle-look 7s ease-in-out infinite;
   }
-  .pomo-read {
+  .pomo-work-read {
     animation: pomo-read 3.2s ease-in-out infinite;
   }
-  .pomo-tick {
+  .pomo-work-clock {
     animation: pomo-tick 2s ease-in-out infinite;
   }
-  .pomo-flash {
+  .pomo-work-hand {
+    animation: pomo-work-sweep 12s steps(12) infinite;
+  }
+  .pomo-work-sparks {
     animation: pomo-flash 1s ease-in-out infinite;
+  }
+  .pomo-work-blink {
+    animation: pomo-idle-blink 4.5s linear infinite;
+  }
+  .pomo-work-look {
+    animation: pomo-work-look 9s ease-in-out infinite;
+  }
+  .pomo-work-page {
+    animation: pomo-page 9s linear infinite;
+  }
+  .pomo-work-grab {
+    animation: pomo-work-grab 9s ease-in-out infinite;
+  }
+  .pomo-work-brows {
+    animation: pomo-work-brows 9s ease-in-out infinite;
   }
   .pomo-sleep {
     animation: pomo-sleep 5s ease-in-out infinite;

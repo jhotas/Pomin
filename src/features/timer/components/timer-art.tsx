@@ -2,28 +2,21 @@ import Image from "next/image";
 import type { PomoMood } from "@/ui/pomo";
 import { useCheer } from "../celebration";
 import { PomoIdle } from "./pomo-idle";
+import { PomoWork } from "./pomo-work";
 
 type Scene = "idle" | "work" | "rest";
-type RasterScene = Exclude<Scene, "idle">;
 
 /**
- * Work and rest are PNG layers (idle is vector, in pomo-idle.tsx). Every
- * layer is cut from the same 960×1160 frame (2× for sharp screens), so
- * they stack exactly with `inset-0`; each one animates on its own (see the
- * `pomo-*` classes in globals.css).
+ * Rest is PNG layers (idle and work are vector, in pomo-idle.tsx and
+ * pomo-work.tsx). Every layer is cut from the same 960×1160 frame (2× for
+ * sharp screens), so they stack exactly with `inset-0`; each one animates on
+ * its own (see the `pomo-*` classes in globals.css).
  */
-const LAYERS: Record<RasterScene, { src: string; className: string }[]> = {
-  work: [
-    { src: "/pomo/work-body.png", className: "pomo-read" },
-    { src: "/pomo/work-clock.png", className: "pomo-tick" },
-    { src: "/pomo/work-sparks.png", className: "pomo-flash" },
-  ],
-  rest: [
-    { src: "/pomo/rest-body.png", className: "pomo-sleep" },
-    { src: "/pomo/rest-z-small.png", className: "pomo-z pomo-z-small" },
-    { src: "/pomo/rest-z-big.png", className: "pomo-z pomo-z-big" },
-  ],
-};
+const REST_LAYERS = [
+  { src: "/pomo/rest-body.png", className: "pomo-sleep" },
+  { src: "/pomo/rest-z-small.png", className: "pomo-z pomo-z-small" },
+  { src: "/pomo/rest-z-big.png", className: "pomo-z pomo-z-big" },
+];
 
 const SCENE: Record<PomoMood, Scene> = {
   happy: "idle",
@@ -47,12 +40,12 @@ function PomoScene({ mood, sizes }: { mood: PomoMood; sizes: string }) {
       data-scene={scene}
       className="pomo-scene relative aspect-[960/1160] h-full max-h-[26rem]"
     >
-      {scene === "idle" ? (
-        <PomoIdle cheer={cheer} />
-      ) : (
+      {scene === "idle" && <PomoIdle cheer={cheer} />}
+      {scene === "work" && <PomoWork />}
+      {scene === "rest" && (
         <>
           <span className="pomo-shadow" />
-          {LAYERS[scene].map((layer) => (
+          {REST_LAYERS.map((layer) => (
             <Image
               key={layer.src}
               src={layer.src}
