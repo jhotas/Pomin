@@ -4,7 +4,7 @@
  * Design tokens. A playful sticker-book look: a white page, chunky ink
  * outlines with hard offset shadows, rounded type, and flat fields of tomato,
  * sky and leaf. Each timer phase owns a colour (focus tomato, short break
- * sky, long break leaf), and Pomo, the tomato mascot, carries the mood.
+ * sky, long break leaf), and Pomin, the tomato mascot, carries the mood.
  * Ink on tomato holds 4.8:1, so tomato fills can carry ink labels. The app has
  * one light theme, whatever the system setting. Components use these tokens
  * through Tailwind classes (bg-surface, text-muted, ...), never raw values.
@@ -138,7 +138,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Pomo bobs gently; still for anyone who asks for reduced motion. */
+/* Pomin bobs gently; still for anyone who asks for reduced motion. */
 @keyframes bob {
   0%,
   100% {
@@ -178,11 +178,11 @@
 }
 
 /*
- * Pomo beside the timer, in vector: pomo-idle.tsx, pomo-work.tsx and
+ * Pomin beside the timer, in vector: pomo-idle.tsx, pomo-work.tsx and
  * pomo-rest.tsx, from idle.svg, working.svg and resting.svg. Each scene loops
  * its own small story: waiting with a hop and a wave, reading under a ticking
  * stopwatch, asleep with drifting z's. Transform origins are the part's spot
- * in its frame, and moves are in % of it, so a small Pomo moves as much for
+ * in its frame, and moves are in % of it, so a small Pomin moves as much for
  * its size as a big one. Everything holds still for reduced motion.
  */
 .pomo-idle-hop {
@@ -733,7 +733,7 @@
   }
 }
 
-/* A change of scene pops Pomo in. */
+/* A change of scene pops Pomin in. */
 @keyframes pomo-enter {
   from {
     transform: scale(0.92);

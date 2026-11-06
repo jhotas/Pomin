@@ -18,7 +18,7 @@ const errorMessage = (error: unknown) =>
 const returnUrl = () => `${window.location.origin}/settings`;
 
 const SIGNED_OUT_DESCRIPTION =
-  "Sign in to keep a copy of your practice in an account and use it on other devices. Without one, pomoapp works in this browser only.";
+  "Sign in to keep a copy of your practice in an account and use it on other devices. Without one, Pomin works in this browser only.";
 
 export function AccountSection() {
   const account = useAccount();
@@ -34,7 +34,7 @@ export function AccountSection() {
     return (
       <SettingsSection
         title="Account"
-        description="Accounts are not set up for this copy of pomoapp."
+        description="Accounts are not set up for this copy of Pomin."
       >
         <p>Your skills and sessions are kept in this browser.</p>
       </SettingsSection>

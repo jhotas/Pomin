@@ -8,7 +8,7 @@ const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "pomoapp", template: "%s · pomoapp" },
+  title: { default: "Pomin", template: "%s · Pomin" },
   description:
     "A pomodoro timer that tracks your path to 10,000 hours per skill.",
 };

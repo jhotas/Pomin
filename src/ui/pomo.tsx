@@ -9,8 +9,8 @@ type PomoProps = {
 const INK = "var(--text)";
 
 /**
- * Pomo, the app's mascot: a tomato with a leaf crown whose face follows the
- * timer. Decorative; the screen states everything Pomo shows in words.
+ * Pomin, the app's mascot: a tomato with a leaf crown whose face follows the
+ * timer. Decorative; the screen states everything Pomin shows in words.
  */
 export function Pomo({ mood = "happy", size = 120, className }: PomoProps) {
   return (

@@ -1,11 +1,11 @@
 /*
- * Pomo waiting for the timer, drawn from idle.svg. The art is split into
+ * Pomin waiting for the timer, drawn from idle.svg. The art is split into
  * stacked layers that share one viewBox, so each moving part animates on its
  * own: the body hops, the left arm waves, the leaves bounce, the eyes blink
  * and glance, the sparks pop. See the `pomo-idle-*` classes in globals.css.
  * A `cheer` swaps those loops for one celebration (the `pomo-cheer-*` ones).
- * Ids carry a prefix unique to each Pomo, so they cannot clash with anything
- * else on the page, nor with another Pomo: a url(#id) finds the first match,
+ * Ids carry a prefix unique to each Pomin, so they cannot clash with anything
+ * else on the page, nor with another Pomin: a url(#id) finds the first match,
  * and if that sits in a hidden copy its gradients and clips do not render.
  * Every layer keeps the source's root fill="none": without it the open mouth
  * stroke gets a black fill. The pupils are cut by a clipPath, not a mask: a

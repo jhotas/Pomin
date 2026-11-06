@@ -226,7 +226,7 @@ export function SoundSettings() {
         label="Notifications"
         hint={
           refusal ??
-          "A note from the browser when a phase ends while pomoapp is out of sight."
+          "A note from the browser when a phase ends while Pomin is out of sight."
         }
         checked={settings.notificationsEnabled}
         onChange={(on) => void setNotifications(on)}

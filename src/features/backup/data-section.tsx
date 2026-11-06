@@ -42,7 +42,7 @@ export function DataSection() {
     try {
       const backup = await data.backup.export();
       const day = backup.exportedAt.slice(0, 10);
-      saveFile(`pomoapp-${day}.json`, JSON.stringify(backup, null, 2));
+      saveFile(`pomin-${day}.json`, JSON.stringify(backup, null, 2));
       setStatus({
         kind: "done",
         message: `Saved ${plural(backup.skills.length, "skill")} and ${plural(backup.sessions.length, "session")}.`,
@@ -69,7 +69,7 @@ export function DataSection() {
     if (!backup.success) {
       setStatus({
         kind: "error",
-        message: `${file.name} is not a pomoapp copy.`,
+        message: `${file.name} is not a Pomin copy.`,
       });
       return;
     }
@@ -129,7 +129,7 @@ export function DataSection() {
           type="file"
           accept="application/json,.json"
           onChange={importData}
-          aria-label="pomoapp copy to bring back"
+          aria-label="Pomin copy to bring back"
           className="sr-only"
           tabIndex={-1}
         />

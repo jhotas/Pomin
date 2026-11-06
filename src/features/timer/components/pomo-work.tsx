@@ -1,13 +1,13 @@
 /*
- * Pomo reading through a focus block, drawn from working.svg. One SVG whose
+ * Pomin reading through a focus block, drawn from working.svg. One SVG whose
  * moving parts are groups, each animated on its own (the `pomo-work-*`
- * classes in globals.css): Pomo sways over the book, the eyes run along the
+ * classes in globals.css): Pomin sways over the book, the eyes run along the
  * lines and blink, the stopwatch fills with the block and wobbles, the
  * sparks flash, and every few
- * seconds Pomo's hand reaches up and a page turns across the book, the eyes
+ * seconds Pomin's hand reaches up and a page turns across the book, the eyes
  * and brows following it. Transform origins are in the art's own units.
  * The face is drawn before the book so the turning page passes in front of
- * it. Ids carry a prefix unique to each Pomo (see pomo-idle.tsx). The pupils
+ * it. Ids carry a prefix unique to each Pomin (see pomo-idle.tsx). The pupils
  * are cut by a clipPath, not a mask, so they can glide inside the eye.
  */
 

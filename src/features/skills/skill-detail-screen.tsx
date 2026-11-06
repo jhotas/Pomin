@@ -40,7 +40,7 @@ export function SkillDetailScreen({ skillId }: { skillId: string }) {
   const skill = useSkill(skillId);
   const sessions = useSkillSessions(skillId);
   const now = useNow();
-  useDocumentTitle(skill.data ? `${skill.data.name} · pomoapp` : null);
+  useDocumentTitle(skill.data ? `${skill.data.name} · Pomin` : null);
 
   if (skill.status === "success" && !skill.data) {
     return (

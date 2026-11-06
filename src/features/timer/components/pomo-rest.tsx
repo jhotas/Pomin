@@ -1,10 +1,10 @@
 /*
- * Pomo asleep through a break, drawn from resting.svg. One SVG whose moving
+ * Pomin asleep through a break, drawn from resting.svg. One SVG whose moving
  * parts are groups, animated by the `pomo-rest-*` classes in globals.css:
  * under the blanket the body breathes slowly, swelling up from where it
  * lies, and the two z's come and go in turn, small then big, drifting up as
  * they fade. The blanket and hands sit in front, still, and hide the body's
- * lower edge as it breathes. Ids carry a prefix unique to each Pomo (see
+ * lower edge as it breathes. Ids carry a prefix unique to each Pomin (see
  * pomo-idle.tsx).
  */
 

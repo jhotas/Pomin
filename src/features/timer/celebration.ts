@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 import type { TimerEvent } from "./core/timer";
 import { freshPhaseEnd } from "./phase-alerts";
 
-/** How Pomo marks a finished focus block: a cheer, or a bigger one for the round. */
+/** How Pomin marks a finished focus block: a cheer, or a bigger one for the round. */
 export type Cheer = "block" | "round";
 
 /** As long as the pomo-cheer-* animations in globals.css. */
@@ -27,7 +27,7 @@ function subscribe(listener: () => void) {
 }
 
 /**
- * Starts Pomo's cheer when a focus block ended just now, run out or skipped,
+ * Starts Pomin's cheer when a focus block ended just now, run out or skipped,
  * like the chime. Nothing for the end of a break, for a phase replayed after
  * the tab was closed, or for anyone who asks for reduced motion.
  */
@@ -41,7 +41,7 @@ export function cheerPhaseEnd(events: TimerEvent[], now: number) {
   timeout = setTimeout(() => set(null), CHEER_MS[cheer]);
 }
 
-/** The cheer Pomo is playing right now, if any. */
+/** The cheer Pomin is playing right now, if any. */
 export function useCheer(): Cheer | null {
   return useSyncExternalStore(
     subscribe,

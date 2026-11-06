@@ -19,7 +19,7 @@ import { PomoPerch, TimerArt } from "./timer-art";
 /**
  * The home page, over the phase's colour from the shell: the countdown in its
  * ring with start, pause and reset under the time and the skill under the
- * ring on the left, and Pomo on the right (on phones, sitting on the ring).
+ * ring on the left, and Pomin on the right (on phones, sitting on the ring).
  * Space, S and R work as everywhere, listed in a pill that rises from the
  * bottom edge on hover.
  */
@@ -54,7 +54,7 @@ export function TimerScreen() {
   const phaseLabel = PHASE_LABEL[state.phase];
   const clock = formatClock(timer.remainingMs);
   useDocumentTitle(
-    state.status === "idle" ? null : `${clock} · ${phaseLabel} · pomoapp`,
+    state.status === "idle" ? null : `${clock} · ${phaseLabel} · Pomin`,
   );
 
   const colors = PHASE_COLOR[state.phase];
@@ -64,7 +64,7 @@ export function TimerScreen() {
   const round = Math.max(1, settings.longBreakEvery);
   const done =
     state.phase === "longBreak" ? round : state.completedFocusCount % round;
-  // Pomo works through a running focus block and rests through the breaks.
+  // Pomin works through a running focus block and rests through the breaks.
   const mood =
     state.phase !== "focus" ? "resting" : running ? "focused" : "happy";
   const share = 1 - timer.remainingMs / state.plannedMs;

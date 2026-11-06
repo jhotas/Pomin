@@ -20,9 +20,9 @@ type SceneProps = {
 };
 
 /**
- * Pomo in the scene for the mood: waiting, reading through a focus block, or
+ * Pomin in the scene for the mood: waiting, reading through a focus block, or
  * asleep through a break, each drawn in vector at one 960×1160 aspect. A
- * focus block that just ended holds the waiting Pomo for a cheer before the
+ * focus block that just ended holds the waiting Pomin for a cheer before the
  * break's scene comes in.
  */
 function PomoScene({ mood, share }: SceneProps) {
@@ -43,7 +43,7 @@ function PomoScene({ mood, share }: SceneProps) {
 }
 
 /**
- * Pomo beside the timer, from tablet width up. Decorative; the clock states
+ * Pomin beside the timer, from tablet width up. Decorative; the clock states
  * the phase in words.
  */
 export function TimerArt({ mood, share }: SceneProps) {
@@ -58,7 +58,7 @@ export function TimerArt({ mood, share }: SceneProps) {
 }
 
 /**
- * A small Pomo sitting on the top of the clock ring, on phones, where there
+ * A small Pomin sitting on the top of the clock ring, on phones, where there
  * is no room beside it. Its feet rest on the ring's outer edge.
  */
 export function PomoPerch({ mood, share }: SceneProps) {
