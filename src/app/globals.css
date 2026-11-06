@@ -178,33 +178,13 @@
 }
 
 /*
- * Pomo beside the timer. Idle and work are vector (pomo-idle.tsx and
- * pomo-work.tsx, from idle.svg and working.svg); rest is layers cut from
- * pomin.png (public/pomo/). Each scene loops its
- * own small story: waiting with a hop and a wave, reading under a ticking
+ * Pomo beside the timer, in vector: pomo-idle.tsx, pomo-work.tsx and
+ * pomo-rest.tsx, from idle.svg, working.svg and resting.svg. Each scene loops
+ * its own small story: waiting with a hop and a wave, reading under a ticking
  * stopwatch, asleep with drifting z's. Transform origins are the part's spot
  * in its frame, and moves are in % of it, so a small Pomo moves as much for
  * its size as a big one. Everything holds still for reduced motion.
  */
-.pomo-shadow {
-  position: absolute;
-  left: 50%;
-  bottom: 2%;
-  width: 66%;
-  height: 6%;
-  translate: -50% 0;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--text) 9%, transparent);
-}
-
-[data-scene="rest"] .pomo-shadow {
-  width: 92%;
-}
-
-.pomo-sleep {
-  transform-origin: 50% 96%;
-}
-
 .pomo-idle-hop {
   transform-origin: 51.8% 92.4%;
 }
@@ -268,12 +248,14 @@
   transform-origin: 554px 590px;
 }
 
-.pomo-z-small {
-  transform-origin: 70% 39%;
+/* Rest origins: the body swells from where it lies; each z from its foot. */
+.pomo-rest-breath {
+  transform-origin: 513px 900px;
 }
 
-.pomo-z-big {
-  transform-origin: 83.5% 30%;
+.pomo-rest-z {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
 }
 
 /*
@@ -719,31 +701,34 @@
   }
 }
 
-/* Resting: only a slow breath, the body swelling a touch where it lies;
-   the z's float up and fade away. */
-@keyframes pomo-sleep {
+/* Resting: a slow, soft breath under the blanket; each z grows in, holds,
+   and drifts up as it fades, the big one a beat after the small one. */
+@keyframes pomo-rest-breath {
   0%,
   100% {
     transform: scale(1, 1);
   }
-  50% {
-    transform: scale(1.006, 1.014);
+  45% {
+    transform: scale(1.012, 1.028);
   }
 }
 
-@keyframes pomo-z {
+@keyframes pomo-rest-z {
   0% {
-    transform: translate(-2.9%, 3.4%) scale(0.6);
+    transform: translate(-10px, 16px) scale(0.6);
     opacity: 0;
   }
-  25% {
+  18% {
+    transform: translate(0, 0) scale(1);
     opacity: 1;
   }
-  70% {
+  60% {
+    transform: translate(4px, -6px) scale(1);
     opacity: 1;
   }
+  80%,
   100% {
-    transform: translate(2.9%, -6.2%) scale(1.1);
+    transform: translate(10px, -20px) scale(1.04);
     opacity: 0;
   }
 }
@@ -812,14 +797,14 @@
   .pomo-work-brows {
     animation: pomo-work-brows 9s ease-in-out infinite;
   }
-  .pomo-sleep {
-    animation: pomo-sleep 5s ease-in-out infinite;
+  .pomo-rest-breath {
+    animation: pomo-rest-breath 4.8s ease-in-out infinite;
   }
-  .pomo-z {
-    animation: pomo-z 4.5s ease-in-out infinite;
+  .pomo-rest-z {
+    animation: pomo-rest-z 4.8s ease-in-out infinite backwards;
   }
-  .pomo-z-big {
-    animation-delay: -2.25s;
+  .pomo-rest-z-big {
+    animation-delay: 0.9s;
   }
   .pomo-idle[data-cheer] .pomo-idle-hop {
     animation: pomo-cheer-hop 1.6s ease-in-out both;
